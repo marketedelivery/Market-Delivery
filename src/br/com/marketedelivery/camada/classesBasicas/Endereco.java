@@ -1,4 +1,4 @@
-package br.com.marketedelivery.classebasica;
+package br.com.marketedelivery.camada.classesBasicas;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
