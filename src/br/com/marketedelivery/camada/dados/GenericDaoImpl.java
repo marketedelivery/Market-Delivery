@@ -12,83 +12,95 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-public abstract class GenericDaoImpl<Entity> implements GenericDao<Entity>, Serializable {
+public abstract class GenericDaoImpl<Entity> implements GenericDao<Entity>, Serializable
+{
 	private static final long serialVersionUID = 1L;
 
 	protected static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("mrktdlvr");
+
 	protected EntityManager em;
 
 	protected Class<Entity> persistentClass;
 
 	@SuppressWarnings("unchecked")
-	public GenericDaoImpl() {
-
+	public GenericDaoImpl()
+	{
 		ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
 		persistentClass = (Class<Entity>) parameterizedType.getActualTypeArguments()[0];
 	}
 
-	public void inicializaTransaction() {
+	public void inicializaTransaction()
+	{
 		em = emf.createEntityManager();
-
 		em.getTransaction().begin();
 	}
 
-	public void commit() {
+	public void commit()
+	{
 		em.getTransaction().commit();
 	}
 
-	public void rollback() {
+	public void rollback()
+	{
 		em.getTransaction().rollback();
 	}
 
-	public void finalizaTransaction() {
+	public void finalizaTransaction()
+	{
 		em.close();
 	}
 
-	public void commitEfinalizaTransaction() {
+	public void commitEfinalizaTransaction()
+	{
 		commit();
 		finalizaTransaction();
 	}
 
-	public void flush() {
+	public void flush()
+	{
 		em.flush();
 	}
 
-	public void joinTransaction() {
+	public void joinTransaction()
+	{
 		em = emf.createEntityManager();
 		em.joinTransaction();
 	}
 
-	public void salva(Entity entity) {
+	public void salva(Entity entity)
+	{
 		em.persist(entity);
 	}
 
-	public void delete(Object id, Class<Entity> classe) {
+	public void delete(Object id, Class<Entity> classe)
+	{
 		Entity entityToBeRemoved = em.getReference(classe, id);
-
 		em.remove(entityToBeRemoved);
 	}
 
-	public Entity atualiza(Entity entity) {
+	public Entity atualiza(Entity entity)
+	{
 		return em.merge(entity);
 	}
 
-	public Entity busca(Integer entityID) {
+	public Entity busca(Integer entityID)
+	{
 		return em.find(persistentClass, entityID);
 	}
 
-	public List<Entity> lista() {
-
+	public List<Entity> lista()
+	{
 		String sql = "from " + persistentClass.getSimpleName();
 		TypedQuery<Entity> query = em.createQuery(sql, persistentClass);
 		return query.getResultList();
-
 	}
 
-	private void populateQueryParameters(Query query, Map<String, Object> parameters) {
-		for (Entry<String, Object> entry : parameters.entrySet()) {
+	@SuppressWarnings("unused")
+	private void populateQueryParameters(Query query, Map<String, Object> parameters)
+	{
+		for (Entry<String, Object> entry : parameters.entrySet())
+		{
 			query.setParameter(entry.getKey(), entry.getValue());
 		}
 	}
-
 }

@@ -1,11 +1,12 @@
-package br.com.marketdelivery.service;
+package br.com.marketedelivery.camada.servicos;
 
 import java.util.List;
 
-import br.com.marketdelivery.domain.Produto;
-import br.com.marketdelivery.util.BusinessException;
+import br.com.marketedelivery.camada.classesBasicas.Produto;
+import br.com.marketedelivery.camada.util.BusinessException;
 
-public interface IProdutoBusiness {
+public interface IProdutoBusiness
+{
 	public void criaProduto(Produto produto) throws BusinessException;
 
 	public void atualizaProduto(Produto produto) throws BusinessException;

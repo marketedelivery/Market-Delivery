@@ -1,41 +1,27 @@
-package br.com.marketedelivery.camada.classesBasicas;
+package br.com.marketedelivery.camada.http;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity
-@Table(name = "cliente")
-public class Cliente
+@XmlRootElement
+public class ClienteHttp
 {
-	@Id
-	@GeneratedValue
-	@Column(name = "codigo")
 	private int codigo;
 
-	@Column(name = "nome", length = 100)
 	private String nome;
 
-	@Column(name = "rg")
 	private String rg;
 
-	@Column(name = "cpf", length = 11)
 	private String cpf;
 
-	@Column(name = "telefone", length = 10)
 	private String telefone;
 
-	@Column(name = "celular", length = 11)
 	private String celular;
 
-	@Column(name = "email", length = 30)
 	private String email;
 
 	private Endereco endereco;
 
-	public Cliente()
+	public ClienteHttp()
 	{
 		this.nome = "";
 		this.rg = "";
@@ -46,7 +32,7 @@ public class Cliente
 		this.endereco = new Endereco();
 	}
 
-	public Cliente(int codigo, String nome, String rg, String cpf, String telefone, String celular, String email,
+	public ClienteHttp(int codigo, String nome, String rg, String cpf, String telefone, String celular, String email,
 			Endereco endereco)
 	{
 		super();

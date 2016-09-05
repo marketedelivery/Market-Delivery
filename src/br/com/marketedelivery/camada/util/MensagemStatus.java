@@ -1,4 +1,4 @@
-package br.com.marketdelivery.util;
+package br.com.marketedelivery.camada.util;
 
 public enum MensagemStatus {
 }
