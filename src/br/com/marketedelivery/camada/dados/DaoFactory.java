@@ -11,10 +11,16 @@ public class DaoFactory
     	factory = Persistence.createEntityManagerFactory("test");
     }
 	public static IClienteDao clienteDao;
+	public static IUsuarioDao usuarioDao;
 	
 	public static IClienteDao getClienteDao()
 	{
 		clienteDao = new ClienteDao(factory.createEntityManager());
 		return clienteDao;
+	}
+	public static IUsuarioDao getUsuarioDao()
+	{
+		usuarioDao = new UsuarioDao(factory.createEntityManager());
+		return usuarioDao;
 	}
 }
