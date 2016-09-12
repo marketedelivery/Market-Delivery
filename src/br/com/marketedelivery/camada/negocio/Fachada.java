@@ -13,7 +13,7 @@ import br.com.marketedelivery.camada.exceptions.ProdutoInexistenteException;
 import br.com.marketedelivery.camada.exceptions.SupermercadoExistenteException;
 import br.com.marketedelivery.camada.exceptions.SupermercadoInexistenteException;
 import br.com.marketedelivery.camada.exceptions.UsuarioExistenteException;
-import br.com.marketedelivery.camada.exceptions.UsuarioInxistenteException;
+import br.com.marketedelivery.camada.exceptions.UsuarioInexistenteException;
 import br.com.marketedelivery.camada.interfaces.negocio.IControladorCliente;
 import br.com.marketedelivery.camada.interfaces.negocio.IControladorProduto;
 import br.com.marketedelivery.camada.interfaces.negocio.IControladorSupermercado;
@@ -97,9 +97,9 @@ public class Fachada implements IFachada
 	}
 
 	@Override
-	public Supermercado pesquisarSupermercadoPorCodigo(int codigo_pessoa) throws SupermercadoInexistenteException
+	public Supermercado pesquisarSupermercadoPorId(int codigo_pessoa) throws SupermercadoInexistenteException
 	{
-		return controladorSupermercado.pesquisarSupermercadoPorCodigo(codigo_pessoa);
+		return controladorSupermercado.pesquisarSupermercadoPorId(codigo_pessoa);
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class Fachada implements IFachada
 	 * marketedelivery.camada.classesBasicas.Usuario)
 	 */
 	@Override
-	public void alterarUsuario(Usuario usuario) throws UsuarioInxistenteException
+	public void alterarUsuario(Usuario usuario) throws UsuarioInexistenteException
 	{
 		controladorUsuario.alterarUsuario(usuario);
 	}
@@ -210,7 +210,7 @@ public class Fachada implements IFachada
 	 * marketedelivery.camada.classesBasicas.Usuario)
 	 */
 	@Override
-	public void excluirUsuario(Usuario usuario) throws UsuarioInxistenteException
+	public void excluirUsuario(Usuario usuario) throws UsuarioInexistenteException
 	{
 		// controladorUsuario.excluir(usuario);
 	}
@@ -221,7 +221,7 @@ public class Fachada implements IFachada
 	 * br.com.marketedelivery.camada.interfaces.IFachada#listarTodosUsuario()
 	 */
 	@Override
-	public List<Usuario> consultarTodosUsuarios() throws UsuarioInxistenteException
+	public List<Usuario> consultarTodosUsuarios() throws UsuarioInexistenteException
 	{
 		return controladorUsuario.consultarTodosUsuarios();
 	}

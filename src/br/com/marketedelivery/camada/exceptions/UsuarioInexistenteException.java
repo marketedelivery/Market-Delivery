@@ -7,7 +7,7 @@ package br.com.marketedelivery.camada.exceptions;
  * @author Audry Martins
  *
  */
-public class UsuarioInxistenteException extends Exception
+public class UsuarioInexistenteException extends Exception
 {
 	/**
 	 * 

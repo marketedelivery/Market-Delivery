@@ -13,7 +13,7 @@ import br.com.marketedelivery.camada.exceptions.ProdutoInexistenteException;
 import br.com.marketedelivery.camada.exceptions.SupermercadoExistenteException;
 import br.com.marketedelivery.camada.exceptions.SupermercadoInexistenteException;
 import br.com.marketedelivery.camada.exceptions.UsuarioExistenteException;
-import br.com.marketedelivery.camada.exceptions.UsuarioInxistenteException;
+import br.com.marketedelivery.camada.exceptions.UsuarioInexistenteException;
 
 public interface IFachada
 {
@@ -37,7 +37,7 @@ public interface IFachada
 
 	public Supermercado pesquisarSupermercadoPorCnpj(String cnpj) throws SupermercadoInexistenteException;
 
-	public Supermercado pesquisarSupermercadoPorCodigo(int codigo) throws SupermercadoInexistenteException;
+	public Supermercado pesquisarSupermercadoPorId(int codigo) throws SupermercadoInexistenteException;
 
 	public List<Supermercado> consultarTodosSupermercados() throws SupermercadoInexistenteException;
 
@@ -57,9 +57,9 @@ public interface IFachada
 	// Usuarios
 	public void cadastrarUsuario(Usuario usuario) throws UsuarioExistenteException;
 
-	public void alterarUsuario(Usuario usuario) throws UsuarioInxistenteException;
+	public void alterarUsuario(Usuario usuario) throws UsuarioInexistenteException;
 
-	public void excluirUsuario(Usuario usuario) throws UsuarioInxistenteException;
+	public void excluirUsuario(Usuario usuario) throws UsuarioInexistenteException;
 
-	public List<Usuario> consultarTodosUsuarios() throws UsuarioInxistenteException;
+	public List<Usuario> consultarTodosUsuarios() throws UsuarioInexistenteException;
 }

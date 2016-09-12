@@ -4,8 +4,10 @@ import java.util.Calendar;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.com.marketedelivery.camada.classesBasicas.Categoria;
 import br.com.marketedelivery.camada.classesBasicas.Marca;
 import br.com.marketedelivery.camada.classesBasicas.Status;
+import br.com.marketedelivery.camada.classesBasicas.Supermercado;
 import br.com.marketedelivery.camada.classesBasicas.UnidadeMedida;
 
 @XmlRootElement
@@ -31,6 +33,10 @@ public class ProdutoHttp
 
 	private Status status;
 
+	private Categoria categoria;
+
+	private Supermercado supermercado;
+
 	// Construtores
 	public ProdutoHttp()
 	{
@@ -42,6 +48,8 @@ public class ProdutoHttp
 		this.informaçãoNutricional = "";
 		this.dataValidade = Calendar.getInstance();
 		this.status = Status.ATIVO;
+		this.categoria = new Categoria();
+		this.supermercado = new Supermercado();
 	}
 
 	/**
@@ -49,26 +57,32 @@ public class ProdutoHttp
 	 * @param nome
 	 * @param descricao
 	 * @param marca
-	 * @param unidadeDeMedida
+	 * @param unidadeMedida
 	 * @param peso
 	 * @param quantidade
 	 * @param informaçãoNutricional
 	 * @param dataValidade
+	 * @param status
+	 * @param categoria
+	 * @param supermercado
 	 */
 	public ProdutoHttp(Integer codigo, String nome, String descricao, Marca marca, UnidadeMedida unidadeMedida,
-			int peso, int quantidade, String informaçãoNutricional, Calendar dataValidade, Status status)
+			int peso, int quantidade, String informaçãoNutricional, Calendar dataValidade, Status status,
+			Categoria categoria, Supermercado supermercado)
 	{
 		super();
 		this.codigo = codigo;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.marca = marca;
-		this.UnidadeMedida = unidadeMedida;
+		UnidadeMedida = unidadeMedida;
 		this.peso = peso;
 		this.quantidade = quantidade;
 		this.informaçãoNutricional = informaçãoNutricional;
 		this.dataValidade = dataValidade;
 		this.status = status;
+		this.categoria = categoria;
+		this.supermercado = supermercado;
 	}
 
 	// Gets e Sets
@@ -170,5 +184,39 @@ public class ProdutoHttp
 	public void setStatus(Status status)
 	{
 		this.status = status;
+	}
+
+	/**
+	 * @return the categoria
+	 */
+	public Categoria getCategoria()
+	{
+		return categoria;
+	}
+
+	/**
+	 * @param categoria
+	 *            the categoria to set
+	 */
+	public void setCategoria(Categoria categoria)
+	{
+		this.categoria = categoria;
+	}
+
+	/**
+	 * @return the supermercado
+	 */
+	public Supermercado getSupermercado()
+	{
+		return supermercado;
+	}
+
+	/**
+	 * @param supermercado
+	 *            the supermercado to set
+	 */
+	public void setSupermercado(Supermercado supermercado)
+	{
+		this.supermercado = supermercado;
 	}
 }

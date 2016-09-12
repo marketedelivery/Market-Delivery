@@ -8,12 +8,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import br.com.marketedelivery.camada.classesBasicas.Status;
 import br.com.marketedelivery.camada.classesBasicas.Usuario;
 import br.com.marketedelivery.camada.dados.DAOFactory;
 import br.com.marketedelivery.camada.exceptions.UsuarioExistenteException;
-import br.com.marketedelivery.camada.exceptions.UsuarioInxistenteException;
+import br.com.marketedelivery.camada.exceptions.UsuarioInexistenteException;
 import br.com.marketedelivery.camada.interfaces.dao.IUsuarioDAO;
 import br.com.marketedelivery.camada.interfaces.negocio.IControladorUsuario;
 
@@ -34,7 +36,14 @@ public class ControladorUsuario implements IControladorUsuario
 	@Path("/cadastrarUsuario")
 	public void cadastrarUsuario(Usuario usuario) throws UsuarioExistenteException
 	{
-		usuarioDAO.inserir(usuario);
+		Usuario u = usuarioDAO.pesquisarUsuarioPorEmail(usuario.getEmail());
+		if (u == null)
+		{
+			usuarioDAO.inserir(usuario);
+		} else
+		{
+			throw new UsuarioExistenteException();
+		}
 	}
 
 	/**
@@ -43,10 +52,17 @@ public class ControladorUsuario implements IControladorUsuario
 	@PUT
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
-	@Path("/alterarUsuario") // Falta o método Atualizar Usuário
-	public void alterarUsuario(Usuario usuario) throws UsuarioInxistenteException
+	@Path("/alterarUsuario")
+	public void alterarUsuario(Usuario usuario) throws UsuarioInexistenteException
 	{
-		usuarioDAO.alterar(usuario);
+		Usuario u = usuarioDAO.pesquisarUsuarioPorEmail(usuario.getEmail());
+		if (u != null)
+		{
+			usuarioDAO.alterar(usuario);
+		} else
+		{
+			throw new UsuarioInexistenteException();
+		}
 	}
 
 	/**
@@ -54,11 +70,17 @@ public class ControladorUsuario implements IControladorUsuario
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/consultarTodosUsuarios") // Falta o método consultar todos os
-										// Usuários
-	public List<Usuario> consultarTodosUsuarios() throws UsuarioInxistenteException
+	@Path("/consultarTodosUsuarios")
+	public List<Usuario> consultarTodosUsuarios() throws UsuarioInexistenteException
 	{
-		return usuarioDAO.consultarTodos();
+		List<Usuario> usuarios = usuarioDAO.consultarTodos();
+		if (usuarios == null || usuarios.size() == 0)
+		{
+			throw new UsuarioInexistenteException();
+		} else
+		{
+			return usuarios;
+		}
 	}
 
 	/**
@@ -67,32 +89,18 @@ public class ControladorUsuario implements IControladorUsuario
 	@DELETE
 	@Produces("application/json; charset=UTF-8")
 	@Path("/excluirUsuario/{codigo}")
-	public void excluirUsuario(Usuario usuario) throws UsuarioInxistenteException
+	public void excluirUsuario(@PathParam("codigo") Usuario usuario) throws UsuarioInexistenteException
 	{
-		// usuarioDAO.excluir(usuario);
-	}
-
-	public Usuario validaUsuario(Usuario us) throws UsuarioInxistenteException
-	{
-		try
+		new DAOFactory();
+		usuarioDAO = DAOFactory.getUsuarioDAO();
+		Usuario u = usuarioDAO.consultarPorId(usuario.getCodigo());
+		if (u == null)
 		{
-			if (us != null)
-			{
-				usuarioDAO = DAOFactory.getUsuarioDAO();
-				Usuario usuario = usuarioDAO.validarUsuario(us);
-				if (us.getSenha().equals(usuario.getSenha()))
-				{
-					return usuario;
-				}
-			} else
-			{
-				throw new UsuarioInxistenteException();
-			}
-		}
-		catch (Exception e)
+			throw new UsuarioInexistenteException();
+		} else
 		{
-			return null;
+			usuario.setStatus(Status.INATIVO);
+			usuarioDAO.alterar(usuario);
 		}
-		return null;
 	}
 }

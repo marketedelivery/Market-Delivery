@@ -16,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import br.com.marketedelivery.camada.classesBasicas.Status;
 import br.com.marketedelivery.camada.classesBasicas.Supermercado;
 import br.com.marketedelivery.camada.dados.DAOFactory;
 import br.com.marketedelivery.camada.exceptions.SupermercadoExistenteException;
@@ -81,14 +82,16 @@ public class ControladorSupermercado implements IControladorSupermercado
 	 */
 	@DELETE
 	@Produces("application/json; charset=UTF-8")
-	@Path("/excluir")
-	public void excluirSupermercado(Supermercado supermercado) throws SupermercadoInexistenteException
+	@Path("/excluirSupermercado/{codigo}")
+	public void excluirSupermercado(@PathParam("codigo") Supermercado supermercado)
+			throws SupermercadoInexistenteException
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		Supermercado cli = supermercadoDAO.pesquisarPorCNPJ(supermercado.getCnpj());
-		if (cli != null)
+		Supermercado s = supermercadoDAO.pesquisarPorCNPJ(supermercado.getCnpj());
+		if (s != null)
 		{
-			// supermercadoDao.excluir(supermercado);
+			supermercado.getUsuario().setStatus(Status.INATIVO);
+			supermercadoDAO.alterar(supermercado);
 		} else
 		{
 			throw new SupermercadoInexistenteException();
@@ -96,14 +99,15 @@ public class ControladorSupermercado implements IControladorSupermercado
 	}
 
 	/**
-	 * Esse método busca um supermercado cadastrad pelo CNPJ
+	 * Esse método pesquisa um supermercado cadastrado pelo CNPJ
 	 * 
 	 * @throws SupermercadoInexistenteException
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/pesquisarSupermercado/{cnpj}")
-	public Supermercado pesquisarSupermercado(@PathParam("cnpj") String Cnpj) throws SupermercadoInexistenteException
+	@Path("/pesquisarSupermercadoPorCnpj/{cnpj}")
+	public Supermercado pesquisarSupermercadoPorCnpj(@PathParam("cnpj") String Cnpj)
+			throws SupermercadoInexistenteException
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
 		Supermercado s = supermercadoDAO.pesquisarPorCNPJ(Cnpj);
@@ -121,8 +125,8 @@ public class ControladorSupermercado implements IControladorSupermercado
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/pesquisarSupermercadoPorCodigo/{codigo}")
-	public Supermercado pesquisarSupermercadoPorCodigo(@PathParam("codigo") int codigo)
+	@Path("/pesquisarSupermercadoPorId/{codigo}")
+	public Supermercado pesquisarSupermercadoPorId(@PathParam("codigo") int codigo)
 			throws SupermercadoInexistenteException
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
@@ -141,8 +145,8 @@ public class ControladorSupermercado implements IControladorSupermercado
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/todasPessoas")
-	public List<Supermercado> listarTodosSupermercados() throws SupermercadoInexistenteException
+	@Path("/consultarTodosSupermercados")
+	public List<Supermercado> consultarTodosSupermercados() throws SupermercadoInexistenteException
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
 		List<Supermercado> supermercados = supermercadoDAO.consultarTodos();
@@ -153,29 +157,5 @@ public class ControladorSupermercado implements IControladorSupermercado
 		{
 			return supermercados;
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * br.com.marketedelivery.camada.interfaces.negocio.IControladorSupermercado
-	 * #pesquisarSupermercadoPorCnpj(java.lang.String)
-	 */
-	@Override
-	public Supermercado pesquisarSupermercadoPorCnpj(String cnpj) throws SupermercadoInexistenteException
-	{
-		return supermercadoDAO.pesquisarPorCNPJ(cnpj);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * br.com.marketedelivery.camada.interfaces.negocio.IControladorSupermercado
-	 * #consultarTodosSupermercados()
-	 */
-	@Override
-	public List<Supermercado> consultarTodosSupermercados() throws SupermercadoInexistenteException
-	{
-		return supermercadoDAO.consultarTodos();
 	}
 }

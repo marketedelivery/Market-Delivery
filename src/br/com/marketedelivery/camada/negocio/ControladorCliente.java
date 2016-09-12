@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import br.com.marketedelivery.camada.classesBasicas.Cliente;
@@ -58,7 +59,7 @@ public class ControladorCliente implements IControladorCliente
 	public void alterarCliente(Cliente cliente) throws ClienteInexistenteException
 	{
 		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
-		if (c == null)
+		if (c != null)
 		{
 			new DAOFactory();
 			clienteDAO = DAOFactory.getClienteDAO();
@@ -77,23 +78,30 @@ public class ControladorCliente implements IControladorCliente
 	@Path("/consultarTodosClientes")
 	public List<Cliente> consultarTodosClientes() throws ClienteInexistenteException
 	{
-		new DAOFactory();
-		clienteDAO = DAOFactory.getClienteDAO();
-		return clienteDAO.consultarTodos();
+		List<Cliente> clientes = clienteDAO.consultarTodos();
+		if (clientes == null || clientes.size() == 0)
+		{
+			throw new ClienteInexistenteException();
+		} else
+		{
+			new DAOFactory();
+			clienteDAO = DAOFactory.getClienteDAO();
+			return clientes;
+		}
 	}
 
 	/*
 	 * @GET
 	 * @Produces("application/json; charset=UTF-8")
-	 * @Path("/getPessoa/{cpf}")
+	 * @Path("/pesquisarCliente/{cpf}")
 	 */
 	/**
 	 * Esse método pesquisa o cliente cadastrado na base
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/pesquisarCliente")
-	public Cliente pesquisarCliente(String cpf) throws ClienteInexistenteException
+	@Path("/pesquisarCliente/{cpf}")
+	public Cliente pesquisarCliente(@PathParam("cpf") String cpf) throws ClienteInexistenteException
 	{
 		new DAOFactory();
 		clienteDAO = DAOFactory.getClienteDAO();
@@ -112,7 +120,7 @@ public class ControladorCliente implements IControladorCliente
 	 */
 	@DELETE
 	@Produces("application/json; charset=UTF-8")
-	@Path("/excluirCliente")
+	@Path("/excluirCliente/{codigo}")
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -120,8 +128,10 @@ public class ControladorCliente implements IControladorCliente
 	 * br.com.marketedelivery.camada.classesBasicas.Cliente)
 	 */
 	@Override
-	public void excluirCliente(Cliente cliente) throws ClienteInexistenteException
+	public void excluirCliente(@PathParam("codigo") Cliente cliente) throws ClienteInexistenteException
 	{
+		new DAOFactory();
+		clienteDAO = DAOFactory.getClienteDAO();
 		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
 		if (c == null)
 		{

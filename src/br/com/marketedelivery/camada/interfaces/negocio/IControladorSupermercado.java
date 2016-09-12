@@ -24,7 +24,7 @@ public interface IControladorSupermercado
 
 	public Supermercado pesquisarSupermercadoPorCnpj(String cnpj) throws SupermercadoInexistenteException;
 
-	public Supermercado pesquisarSupermercadoPorCodigo(int codigo) throws SupermercadoInexistenteException;
+	public Supermercado pesquisarSupermercadoPorId(int codigo) throws SupermercadoInexistenteException;
 
 	public List<Supermercado> consultarTodosSupermercados() throws SupermercadoInexistenteException;
 }

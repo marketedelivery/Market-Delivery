@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,16 +16,16 @@ public class Supermercado
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int codigo;
 
-	@Column(name = "supmerc_nome", length = 50, nullable = true)
+	@Column(name = "supmerc_nome", length = 50, nullable = false)
 	private String nome;
 
 	@Column(length = 14, nullable = false, unique = true)
 	private String cnpj;
 
-	@Column(nullable = false)
+	@Column(length = 50, nullable = false)
 	private String inscricaoEstatdual;
 
-	@Column(name = "telefone", length = 11)
+	@Column(name = "telefone", length = 11, nullable = false)
 	private String telefone;
 
 	@Column(name = "supmerc_email", length = 50, nullable = true)
@@ -33,10 +34,12 @@ public class Supermercado
 	@Column(name = "supmerc_estoque", length = 5, nullable = true)
 	private int estoque;
 
-	@Column(name = "supermercado_preco_produto", length = 6, nullable = false)
+	@Column(name = "supermercado_preco_produto", length = 6, nullable = true)
 	private double preco_Produto;
 
-	// Falta colocar o preço do produto referente a cada produto
+	@OneToOne
+	private Usuario usuario;
+
 	public Supermercado()
 	{
 		super();
@@ -45,6 +48,7 @@ public class Supermercado
 		this.inscricaoEstatdual = "";
 		this.telefone = "";
 		this.email = "";
+		this.usuario = new Usuario();
 	}
 
 	/**
@@ -58,7 +62,7 @@ public class Supermercado
 	 * @param preco_Produto
 	 */
 	public Supermercado(int codigo, String nome, String cnpj, String inscricaoEstatdual, String telefone, String email,
-			int estoque, double preco_Produto)
+			int estoque, double preco_Produto, Usuario usuario)
 	{
 		super();
 		this.codigo = codigo;
@@ -69,6 +73,7 @@ public class Supermercado
 		this.email = email;
 		this.estoque = estoque;
 		this.preco_Produto = preco_Produto;
+		this.usuario = usuario;
 	}
 
 	public int getCodigo()
@@ -158,10 +163,32 @@ public class Supermercado
 		this.preco_Produto = preco_Produto;
 	}
 
+	/**
+	 * @return the usuario
+	 */
+	public Usuario getUsuario()
+	{
+		return usuario;
+	}
+
+	/**
+	 * @param usuario
+	 *            the usuario to set
+	 */
+	public void setUsuario(Usuario usuario)
+	{
+		this.usuario = usuario;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString()
 	{
 		return "Supermercado [codigo=" + codigo + ", nome=" + nome + ", cnpj=" + cnpj + ", inscricaoEstatdual="
-				+ inscricaoEstatdual + ", telefone=" + telefone + ", email=" + email + ", estoque=" + estoque + "]";
+				+ inscricaoEstatdual + ", telefone=" + telefone + ", email=" + email + ", estoque=" + estoque
+				+ ", preco_Produto=" + preco_Produto + ", usuario=" + usuario + "]";
 	}
 }

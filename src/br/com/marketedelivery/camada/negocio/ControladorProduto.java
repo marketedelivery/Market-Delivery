@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import br.com.marketedelivery.camada.classesBasicas.Produto;
@@ -56,7 +57,7 @@ public class ControladorProduto implements IControladorProduto
 	public void alterarProduto(Produto produto) throws ProdutoInexistenteException
 	{
 		Produto p = produtoDAO.pesquisarProdutoPorNome(produto.getNome());
-		if (p == null)
+		if (p != null)
 		{
 			new DAOFactory();
 			produtoDAO = DAOFactory.getProdutoDAO();
@@ -73,8 +74,10 @@ public class ControladorProduto implements IControladorProduto
 	@DELETE
 	@Produces("application/json; charset=UTF-8")
 	@Path("/excluirProduto/{codigo}")
-	public void excluirProduto(Produto produto) throws ProdutoInexistenteException
+	public void excluirProduto(@PathParam("codigo") Produto produto) throws ProdutoInexistenteException
 	{
+		new DAOFactory();
+		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto produtoRetornado = produtoDAO.consultarPorId(produto.getCodigo());
 		if (produtoRetornado == null)
 		{
@@ -115,8 +118,8 @@ public class ControladorProduto implements IControladorProduto
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/pesquisarProduto")
-	public Produto pesquisarProduto(String nome) throws ProdutoInexistenteException
+	@Path("/pesquisarProduto/{nome}")
+	public Produto pesquisarProduto(@PathParam("nome") String nome) throws ProdutoInexistenteException
 	{
 		new DAOFactory();
 		produtoDAO = DAOFactory.getProdutoDAO();
@@ -130,12 +133,35 @@ public class ControladorProduto implements IControladorProduto
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see br.com.marketedelivery.camada.interfaces.negocio.IControladorProduto#pesquisarProdutoPorId(int)
+	/*
+	 * @GET
+	 * @Produces("application/json; charset=UTF-8")
+	 * @Path("/pesquisarProdutoPorId/{codigo}")
+	 */
+	/**
+	 * Esse método pesquisa o produto cadastrado na base
+	 */
+	@GET
+	@Produces("application/json; charset=UTF-8")
+	@Path("/pesquisarProdutoPorId/{codigo}")
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * br.com.marketedelivery.camada.interfaces.negocio.IControladorProduto#
+	 * pesquisarProdutoPorId(int)
 	 */
 	@Override
-	public Produto pesquisarProdutoPorId(int codigo) throws ProdutoInexistenteException
+	public Produto pesquisarProdutoPorId(@PathParam("codigo") int codigo) throws ProdutoInexistenteException
 	{
-		return produtoDAO.consultarPorId(codigo);
+		new DAOFactory();
+		produtoDAO = DAOFactory.getProdutoDAO();
+		Produto p = produtoDAO.consultarPorId(codigo);
+		if (p == null)
+		{
+			throw new ProdutoInexistenteException();
+		} else
+		{
+			return p;
+		}
 	}
 }

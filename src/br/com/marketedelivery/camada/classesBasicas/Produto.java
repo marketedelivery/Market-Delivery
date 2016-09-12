@@ -204,4 +204,36 @@ public class Produto
 	{
 		this.status = status;
 	}
+
+	/**
+	 * @return the categoria
+	 */
+	public Categoria getCategoria()
+	{
+		return categoria;
+	}
+
+	/**
+	 * @param categoria the categoria to set
+	 */
+	public void setCategoria(Categoria categoria)
+	{
+		this.categoria = categoria;
+	}
+
+	/**
+	 * @return the supermercado
+	 */
+	public Supermercado getSupermercado()
+	{
+		return supermercado;
+	}
+
+	/**
+	 * @param supermercado the supermercado to set
+	 */
+	public void setSupermercado(Supermercado supermercado)
+	{
+		this.supermercado = supermercado;
+	}
 }

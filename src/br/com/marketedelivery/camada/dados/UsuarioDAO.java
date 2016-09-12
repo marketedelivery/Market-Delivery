@@ -27,7 +27,7 @@ public class UsuarioDAO extends DAOGenerico<Usuario> implements IUsuarioDAO
 		EntityTransaction tx = getEntityManager().getTransaction();
 		try
 		{
-			String sql = "SELECT us FROM Usuario HHERE us.email = :email and us.senha = :senha";
+			String sql = "SELECT us FROM Usuario WHERE us.email = :email and us.senha = :senha";
 			TypedQuery<Usuario> queryUsuario = this.entityManager.createQuery(sql, Usuario.class);
 			queryUsuario.setParameter("email", usuario.getEmail());
 			queryUsuario.setParameter("senha", usuario.getSenha());
@@ -42,6 +42,23 @@ public class UsuarioDAO extends DAOGenerico<Usuario> implements IUsuarioDAO
 			}
 		}
 		return null;
+	}
+
+	public Usuario pesquisarUsuarioPorEmail(String email)
+	{
+		String consulta = "SELECT u FROM Usuario u WHERE u.email = :email";
+		TypedQuery<Usuario> retorno = getEntityManager().createQuery(consulta, Usuario.class);
+		retorno.setParameter("email", email);
+		Usuario resultado;
+		try
+		{
+			resultado = retorno.getSingleResult();
+			return resultado;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	public EntityManager getManager()

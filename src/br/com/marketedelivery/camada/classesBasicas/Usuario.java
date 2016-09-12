@@ -2,6 +2,7 @@ package br.com.marketedelivery.camada.classesBasicas;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class Usuario
 	@Column(name = "senha", length = 55, nullable = false)
 	private String senha;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private Status status;
 
 	// Construtores
