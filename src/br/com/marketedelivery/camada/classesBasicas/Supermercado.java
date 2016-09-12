@@ -33,18 +33,20 @@ public class Supermercado
 	@Column(name = "supmerc_estoque", length = 5, nullable = true)
 	private int estoque;
 
-	
+	@Column(name = "supermercado_preco_produto", length = 6, nullable = false)
+	private double preco_Produto;
+
+	// Falta colocar o preço do produto referente a cada produto
 	public Supermercado()
 	{
 		super();
-		
 		this.nome = "";
 		this.cnpj = "";
 		this.inscricaoEstatdual = "";
 		this.telefone = "";
 		this.email = "";
 	}
-	
+
 	/**
 	 * @param codigo
 	 * @param nome
@@ -53,9 +55,10 @@ public class Supermercado
 	 * @param telefone
 	 * @param email
 	 * @param estoque
+	 * @param preco_Produto
 	 */
-	public Supermercado(int codigo, String nome, String cnpj, String inscricaoEstatdual, String telefone,
-			String email, int estoque)
+	public Supermercado(int codigo, String nome, String cnpj, String inscricaoEstatdual, String telefone, String email,
+			int estoque, double preco_Produto)
 	{
 		super();
 		this.codigo = codigo;
@@ -65,9 +68,9 @@ public class Supermercado
 		this.telefone = telefone;
 		this.email = email;
 		this.estoque = estoque;
+		this.preco_Produto = preco_Produto;
 	}
-	
-	
+
 	public int getCodigo()
 	{
 		return codigo;
@@ -138,45 +141,27 @@ public class Supermercado
 		this.estoque = estoque;
 	}
 
+	/**
+	 * @return the preco_Produto
+	 */
+	public double getPreco_Produto()
+	{
+		return preco_Produto;
+	}
+
+	/**
+	 * @param preco_Produto
+	 *            the preco_Produto to set
+	 */
+	public void setPreco_Produto(double preco_Produto)
+	{
+		this.preco_Produto = preco_Produto;
+	}
+
 	@Override
 	public String toString()
 	{
 		return "Supermercado [codigo=" + codigo + ", nome=" + nome + ", cnpj=" + cnpj + ", inscricaoEstatdual="
 				+ inscricaoEstatdual + ", telefone=" + telefone + ", email=" + email + ", estoque=" + estoque + "]";
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		Supermercado other = (Supermercado) obj;
-		if (cnpj == null)
-		{
-			if (other.cnpj != null) return false;
-		} else if (!cnpj.equals(other.cnpj)) return false;
-		if (codigo == null)
-		{
-			if (other.codigo != null) return false;
-		} else if (!codigo.equals(other.codigo)) return false;
-		if (email == null)
-		{
-			if (other.email != null) return false;
-		} else if (!email.equals(other.email)) return false;
-		if (estoque != other.estoque) return false;
-		if (inscricaoEstatdual == null)
-		{
-			if (other.inscricaoEstatdual != null) return false;
-		} else if (!inscricaoEstatdual.equals(other.inscricaoEstatdual)) return false;
-		if (nome == null)
-		{
-			if (other.nome != null) return false;
-		} else if (!nome.equals(other.nome)) return false;
-		if (telefone == null)
-		{
-			if (other.telefone != null) return false;
-		} else if (!telefone.equals(other.telefone)) return false;
-		return true;
 	}
 }

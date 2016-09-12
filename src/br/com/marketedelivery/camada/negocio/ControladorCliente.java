@@ -2,7 +2,6 @@ package br.com.marketedelivery.camada.negocio;
 
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,15 +11,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import br.com.marketedelivery.camada.classesBasicas.Cliente;
-import br.com.marketedelivery.camada.dados.DaoFactory;
-import br.com.marketedelivery.camada.dados.IClienteDao;
+import br.com.marketedelivery.camada.classesBasicas.Status;
+import br.com.marketedelivery.camada.dados.DAOFactory;
+import br.com.marketedelivery.camada.exceptions.ClienteExistenteException;
+import br.com.marketedelivery.camada.exceptions.ClienteInexistenteException;
+import br.com.marketedelivery.camada.interfaces.dao.IClienteDAO;
+import br.com.marketedelivery.camada.interfaces.negocio.IControladorCliente;
 
 @Path("/service")
-public class ControladorCliente
+public class ControladorCliente implements IControladorCliente
 {
-	private IClienteDao clienteDao;
+	private IClienteDAO clienteDAO;
 
 	/**
+	 * @throws ClienteInexistenteException
 	 * @Consumes - determina o formato dos dados que vamos postar
 	 * @Produces - determina o formato dos dados que vamos retornar
 	 * 
@@ -30,43 +34,52 @@ public class ControladorCliente
 	@Consumes("application/json; charset=UTF-8")
 	@Produces("application/json; charset=UTF-8")
 	@Path("/cadastrarCliente")
-	public void cadastrarCliente(Cliente cliente)
+	public void cadastrarCliente(Cliente cliente) throws ClienteExistenteException
 	{
-		Cliente cli = clienteDao.buscarClientePorCPF(cliente.getCpf());
-		if (cli == null)
+		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
+		if (c == null)
 		{
-			clienteDao = new DaoFactory().getClienteDao();
-			clienteDao.inserir(cliente);
+			new DAOFactory();
+			clienteDAO = DAOFactory.getClienteDAO();
+			clienteDAO.inserir(cliente);
 		} else
 		{
-			JOptionPane.showMessageDialog(null, "CPF j� cadastrado no sistema", "Aten��o",
-					JOptionPane.INFORMATION_MESSAGE);
+			throw new ClienteExistenteException();
 		}
 	}
 
 	/**
-	 * Essse método altera uma pessoa já cadastrada
+	 * Essse método altera um cliente já cadastrado
 	 **/
 	@PUT
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
-	@Path("/atualizarCliente")
-	public void atualizarCliente(Cliente cliente)
+	@Path("/alterarCliente")
+	public void alterarCliente(Cliente cliente) throws ClienteInexistenteException
 	{
-		clienteDao = new DaoFactory().getClienteDao();
-		clienteDao.alterar(cliente);
+		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
+		if (c == null)
+		{
+			new DAOFactory();
+			clienteDAO = DAOFactory.getClienteDAO();
+			clienteDAO.alterar(cliente);
+		} else
+		{
+			throw new ClienteInexistenteException();
+		}
 	}
 
 	/**
-	 * Esse método lista todos os clientes cadastradas na base
+	 * Esse método lista todos os clientes cadastrados na base
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/listarCliente")
-	public List<Cliente> listarCliente()
+	@Path("/consultarTodosClientes")
+	public List<Cliente> consultarTodosClientes() throws ClienteInexistenteException
 	{
-		clienteDao = new DaoFactory().getClienteDao();
-		return clienteDao.consultarTodos();
+		new DAOFactory();
+		clienteDAO = DAOFactory.getClienteDAO();
+		return clienteDAO.consultarTodos();
 	}
 
 	/*
@@ -74,32 +87,49 @@ public class ControladorCliente
 	 * @Produces("application/json; charset=UTF-8")
 	 * @Path("/getPessoa/{cpf}")
 	 */
-	
 	/**
 	 * Esse método pesquisa o cliente cadastrado na base
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
 	@Path("/pesquisarCliente")
-	public Cliente pesquisarCliente(String cpf)
+	public Cliente pesquisarCliente(String cpf) throws ClienteInexistenteException
 	{
-		clienteDao = new DaoFactory().getClienteDao();
-		Cliente cli = clienteDao.buscarClientePorCPF(cpf);
-		if (cli == null)
+		new DAOFactory();
+		clienteDAO = DAOFactory.getClienteDAO();
+		Cliente cliente = clienteDAO.buscarClientePorCPF(cpf);
+		if (cliente == null)
 		{
-			JOptionPane.showMessageDialog(null, "Nenhum Cadastro encontrado", "Aten��o",
-					JOptionPane.INFORMATION_MESSAGE);
-			return null;
+			throw new ClienteInexistenteException();
 		} else
 		{
-			return cli;
+			return cliente;
 		}
 	}
-	
+
 	/**
-	 * Excluindo uma pessoa pelo código
+	 * Excluindo um cliente pelo código
 	 */
-	/*@DELETE
+	@DELETE
 	@Produces("application/json; charset=UTF-8")
-	@Path("/excluir/{codigo}")*/
+	@Path("/excluirCliente")
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * br.com.marketedelivery.camada.negocio.IControladorCliente#excluirCliente(
+	 * br.com.marketedelivery.camada.classesBasicas.Cliente)
+	 */
+	@Override
+	public void excluirCliente(Cliente cliente) throws ClienteInexistenteException
+	{
+		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
+		if (c == null)
+		{
+			cliente.getUsuario().setStatus(Status.INATIVO);
+			clienteDAO.alterar(cliente);
+		} else
+		{
+			throw new ClienteInexistenteException();
+		}
+	}
 }

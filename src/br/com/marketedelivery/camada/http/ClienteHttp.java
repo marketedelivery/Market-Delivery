@@ -2,6 +2,9 @@ package br.com.marketedelivery.camada.http;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import br.com.marketedelivery.camada.classesBasicas.Endereco;
+import br.com.marketedelivery.camada.classesBasicas.Usuario;
+
 @XmlRootElement
 public class ClienteHttp
 {
@@ -17,7 +20,7 @@ public class ClienteHttp
 
 	private String celular;
 
-	private String email;
+	private Usuario usuario;
 
 	private Endereco endereco;
 
@@ -28,11 +31,11 @@ public class ClienteHttp
 		this.cpf = "";
 		this.telefone = "";
 		this.celular = "";
-		this.email = "";
+		this.usuario = new Usuario();
 		this.endereco = new Endereco();
 	}
 
-	public ClienteHttp(int codigo, String nome, String rg, String cpf, String telefone, String celular, String email,
+	public ClienteHttp(int codigo, String nome, String rg, String cpf, String telefone, String celular, Usuario usuario,
 			Endereco endereco)
 	{
 		super();
@@ -42,7 +45,7 @@ public class ClienteHttp
 		this.cpf = cpf;
 		this.telefone = telefone;
 		this.celular = celular;
-		this.email = email;
+		this.usuario = usuario;
 		this.endereco = endereco;
 	}
 
@@ -106,14 +109,14 @@ public class ClienteHttp
 		this.celular = celular;
 	}
 
-	public String getEmail()
+	public Usuario getUsuario()
 	{
-		return email;
+		return usuario;
 	}
 
-	public void setEmail(String email)
+	public void setUsuario(Usuario usuario)
 	{
-		this.email = email;
+		this.usuario = usuario;
 	}
 
 	public Endereco getEndereco()

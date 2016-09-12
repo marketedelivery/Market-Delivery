@@ -16,7 +16,7 @@ public abstract class GenericDaoImpl<Entity> implements GenericDao<Entity>, Seri
 {
 	private static final long serialVersionUID = 1L;
 
-	protected static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("mrktdlvr");
+	protected static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("db_marketDelivery");
 
 	protected EntityManager em;
 

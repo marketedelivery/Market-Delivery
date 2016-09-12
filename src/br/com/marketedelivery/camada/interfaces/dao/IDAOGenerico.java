@@ -1,4 +1,4 @@
-package br.com.marketedelivery.camada.dados;
+package br.com.marketedelivery.camada.interfaces.dao;
 
 import java.util.List;
 
@@ -7,8 +7,6 @@ public interface IDAOGenerico<Entidade>
 	public void inserir(Entidade entidade);
 
 	public void alterar(Entidade entidade);
-
-	public void remover(Entidade entidade);
 
 	public Entidade consultarPorId(Integer id);
 

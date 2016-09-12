@@ -10,11 +10,11 @@ import javax.persistence.TypedQuery;
 
 import br.com.marketedelivery.camada.classesBasicas.Supermercado;
 
-public class SupermercadoDao extends DAOGenerico<Supermercado>
+public class SupermercadoDAO extends DAOGenerico<Supermercado>
 {
 	private EntityManager manager;
 
-	public SupermercadoDao(EntityManager em)
+	public SupermercadoDAO(EntityManager em)
 	{
 		super(em);
 		this.setManager(em);
@@ -39,7 +39,7 @@ public class SupermercadoDao extends DAOGenerico<Supermercado>
 
 	public Supermercado buscarPorNome(String nome)
 	{
-		String comandoSelect = "SELECT c FROM Supermercado c WHERE c.nome = :N ";
+		String comandoSelect = "SELECT s FROM Supermercado s WHERE s.nome = :N ";
 		TypedQuery<Supermercado> retorno = getEntityManager().createQuery(comandoSelect, Supermercado.class);
 		retorno.setParameter("N", "%" + nome + "%");
 		Supermercado resultado;

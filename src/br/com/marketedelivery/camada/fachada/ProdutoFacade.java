@@ -1,15 +1,9 @@
 package br.com.marketedelivery.camada.fachada;
 
-import java.util.List;
-
-import br.com.marketedelivery.camada.classesBasicas.Produto;
-import br.com.marketedelivery.camada.servicos.IProdutoBusiness;
-import br.com.marketedelivery.camada.util.BusinessException;
-
 public class ProdutoFacade
 {
-	private IProdutoBusiness produtoBusiness;
-
+	/*private IControladorProduto produtoBusiness;
+	
 	public void criaProduto(Produto produto) throws BusinessException
 	{
 		produtoBusiness.criaProduto(produto);
@@ -28,5 +22,5 @@ public class ProdutoFacade
 	public List<Produto> listaProdutos()
 	{
 		return produtoBusiness.listaProdutos();
-	}
+	}*/
 }

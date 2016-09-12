@@ -1,63 +1,38 @@
-package br.com.marketedelivery.camada.classesBasicas;
+package br.com.marketedelivery.camada.http;
 
 import java.util.Calendar;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author Audry Martins
- *
- */
-@Entity
-public class Produto
+import br.com.marketedelivery.camada.classesBasicas.Marca;
+import br.com.marketedelivery.camada.classesBasicas.Status;
+import br.com.marketedelivery.camada.classesBasicas.UnidadeMedida;
+
+@XmlRootElement
+public class ProdutoHttp
 {
-	@Id
-	@GeneratedValue
 	private Integer codigo;
 
-	@Column(name = "nome_produto", length = 50, nullable = false)
 	private String nome;
 
-	@Column(name = "descricao_produto", length = 150, nullable = false)
 	private String descricao;
 
-	@ManyToOne
 	private Marca marca;
 
-	@ManyToOne
 	private UnidadeMedida UnidadeMedida;
 
-	@Column(name = "peso_produto", length = 50, nullable = false)
 	private int peso;
 
-	@Column(name = "quantidade_produto", length = 50, nullable = false)
 	private int quantidade;
 
-	@Column(name = "inf_Nutri_produto", length = 50, nullable = false)
 	private String informaçãoNutricional;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "data_validade_produto", length = 50, nullable = false)
 	private Calendar dataValidade;
 
-	@Enumerated
 	private Status status;
 
-	@ManyToOne
-	private Categoria categoria;
-
-	@ManyToOne
-	private Supermercado supermercado;
-
 	// Construtores
-	public Produto()
+	public ProdutoHttp()
 	{
 		this.nome = "";
 		this.descricao = "";
@@ -67,8 +42,6 @@ public class Produto
 		this.informaçãoNutricional = "";
 		this.dataValidade = Calendar.getInstance();
 		this.status = Status.ATIVO;
-		this.categoria = new Categoria();
-		this.supermercado = new Supermercado();
 	}
 
 	/**
@@ -76,32 +49,26 @@ public class Produto
 	 * @param nome
 	 * @param descricao
 	 * @param marca
-	 * @param unidadeMedida
+	 * @param unidadeDeMedida
 	 * @param peso
 	 * @param quantidade
 	 * @param informaçãoNutricional
 	 * @param dataValidade
-	 * @param status
-	 * @param categoria
-	 * @param supermercado
 	 */
-	public Produto(Integer codigo, String nome, String descricao, Marca marca, UnidadeMedida unidadeMedida, int peso,
-			int quantidade, String informaçãoNutricional, Calendar dataValidade, Status status, Categoria categoria,
-			Supermercado supermercado)
+	public ProdutoHttp(Integer codigo, String nome, String descricao, Marca marca, UnidadeMedida unidadeMedida,
+			int peso, int quantidade, String informaçãoNutricional, Calendar dataValidade, Status status)
 	{
 		super();
 		this.codigo = codigo;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.marca = marca;
-		UnidadeMedida = unidadeMedida;
+		this.UnidadeMedida = unidadeMedida;
 		this.peso = peso;
 		this.quantidade = quantidade;
 		this.informaçãoNutricional = informaçãoNutricional;
 		this.dataValidade = dataValidade;
 		this.status = status;
-		this.categoria = categoria;
-		this.supermercado = supermercado;
 	}
 
 	// Gets e Sets

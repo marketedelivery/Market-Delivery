@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,20 +19,20 @@ public class Cliente
 	@Column(name = "nome", length = 100)
 	private String nome;
 
-	@Column(name = "rg")
+	@Column(name = "rg", length = 15, nullable = true)
 	private String rg;
 
-	@Column(name = "cpf", length = 11)
+	@Column(name = "cpf", length = 11, nullable = false)
 	private String cpf;
 
-	@Column(name = "telefone", length = 10)
+	@Column(name = "telefone", length = 10, nullable = true)
 	private String telefone;
 
-	@Column(name = "celular", length = 11)
+	@Column(name = "celular", length = 11, nullable = false)
 	private String celular;
 
-	@Column(name = "email", length = 30)
-	private String email;
+	@OneToOne
+	private Usuario usuario;
 
 	private Endereco endereco;
 
@@ -42,11 +43,11 @@ public class Cliente
 		this.cpf = "";
 		this.telefone = "";
 		this.celular = "";
-		this.email = "";
+		this.usuario = new Usuario();
 		this.endereco = new Endereco();
 	}
 
-	public Cliente(int codigo, String nome, String rg, String cpf, String telefone, String celular, String email,
+	public Cliente(int codigo, String nome, String rg, String cpf, String telefone, String celular, Usuario usuario,
 			Endereco endereco)
 	{
 		super();
@@ -56,7 +57,7 @@ public class Cliente
 		this.cpf = cpf;
 		this.telefone = telefone;
 		this.celular = celular;
-		this.email = email;
+		this.usuario = usuario;
 		this.endereco = endereco;
 	}
 
@@ -120,14 +121,14 @@ public class Cliente
 		this.celular = celular;
 	}
 
-	public String getEmail()
+	public Usuario getUsuario()
 	{
-		return email;
+		return usuario;
 	}
 
-	public void setEmail(String email)
+	public void setUsuario(Usuario usuario)
 	{
-		this.email = email;
+		this.usuario = usuario;
 	}
 
 	public Endereco getEndereco()

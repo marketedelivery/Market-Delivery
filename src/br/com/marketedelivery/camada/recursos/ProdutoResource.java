@@ -1,4 +1,4 @@
-package br.com.marketedelivery.camada.recursos;
+/*package br.com.marketedelivery.camada.recursos;
 
 import javax.transaction.Status;
 import javax.ws.rs.Path;
@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 
 import br.com.marketedelivery.camada.classesBasicas.Produto;
 import br.com.marketedelivery.camada.fachada.ProdutoFacade;
-import br.com.marketedelivery.camada.util.BusinessException;
+import br.com.marketedelivery.camada.interfaces.negocio.IProdutoResource;
 import br.com.marketedelivery.camada.util.Constants;
 
 @Path("/produtos")
@@ -76,4 +76,4 @@ public class ProdutoResource implements IProdutoResource
 			return Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build();
 		}
 	}
-}
+}*/

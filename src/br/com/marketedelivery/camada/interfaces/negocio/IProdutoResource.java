@@ -1,4 +1,4 @@
-package br.com.marketedelivery.camada.recursos;
+package br.com.marketedelivery.camada.interfaces.negocio;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

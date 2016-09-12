@@ -8,15 +8,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-/** 
- * @param <Entidade, PK>
+import br.com.marketedelivery.camada.interfaces.dao.IDAOGenerico;
+
+/**
+ * @param <Entidade,
+ *            PK>
  */
 public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 {
+	// Atributos
 	protected EntityManager entityManager;
 
 	protected Class<Entidade> classePersistente;
 
+	// Construtores
 	@SuppressWarnings("unchecked")
 	public DAOGenerico(EntityManager em)
 	{
@@ -25,31 +30,7 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 		classePersistente = (Class<Entidade>) parameterizedType.getActualTypeArguments()[0];
 	}
 
-	/**
-	 * Executa o merge do objeto que se encontra em mem�ria.
-	 * 
-	 * @param objeto a ser realizado o merge
-	 * @return objeto que foi executado o merge
-	 */
-	public final void alterar(Entidade objeto)
-	{
-		EntityTransaction tx = getEntityManager().getTransaction();
-		try
-		{
-			tx.begin();
-			objeto = getEntityManager().merge(objeto);
-			tx.commit();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			if (tx != null && tx.isActive())
-			{
-				tx.rollback();
-			}
-		}
-	}
-
+	// Métodos
 	/**
 	 * Salva o objeto atual na base de dados.
 	 * 
@@ -77,50 +58,20 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 	}
 
 	/**
-	 * Salva o objeto atual na base de dados.
+	 * Executa o merge do objeto que se encontra em mem�ria.
 	 * 
 	 * @param objeto
-	 *            a ser salvo
+	 *            a ser realizado o merge
+	 * @return objeto que foi executado o merge
 	 */
-	public final void inserirColecao(Collection<Entidade> colecao)
-	{
-		EntityTransaction tx = getEntityManager().getTransaction();
-		try
-		{
-			tx.begin();
-			for (Entidade entidade : colecao)
-			{
-				getEntityManager().persist(entidade);
-			}
-			tx.commit();
-			System.out.println(classePersistente.getSimpleName() + " salvos com sucesso: " + colecao.size());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			if (tx != null && tx.isActive())
-			{
-				tx.rollback();
-			}
-		}
-	}
-
-	/**
-	 * Remove o objeto da base de dados.
-	 * 
-	 * @param objeto
-	 *            a ser removido
-	 */
-	public final void remover(Entidade objeto)
+	public final void alterar(Entidade objeto)
 	{
 		EntityTransaction tx = getEntityManager().getTransaction();
 		try
 		{
 			tx.begin();
 			objeto = getEntityManager().merge(objeto);
-			getEntityManager().remove(objeto);
 			tx.commit();
-			System.out.println(classePersistente.getSimpleName() + " removido com sucesso");
 		}
 		catch (Exception e)
 		{
@@ -130,27 +81,6 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 				tx.rollback();
 			}
 		}
-	}
-
-	/**
-	 * Busca o objeto uma vez passado sua chave como par�metro.
-	 * 
-	 * @param chave
-	 *            identificador
-	 * @return Objeto do tipo T
-	 */
-	public final Entidade consultarPorId(Integer chave)
-	{
-		Entidade instance = null;
-		try
-		{
-			instance = (Entidade) getEntityManager().find(classePersistente, chave);
-		}
-		catch (RuntimeException re)
-		{
-			re.printStackTrace();
-		}
-		return instance;
 	}
 
 	public List<Entidade> consultarTodos()
@@ -184,6 +114,57 @@ public abstract class DAOGenerico<Entidade> implements IDAOGenerico<Entidade>
 		return null;
 	}
 
+	/**
+	 * Busca o objeto uma vez passado sua chave como par�metro.
+	 * 
+	 * @param chave
+	 *            identificador
+	 * @return Objeto do tipo T
+	 */
+	public final Entidade consultarPorId(Integer chave)
+	{
+		Entidade instance = null;
+		try
+		{
+			instance = (Entidade) getEntityManager().find(classePersistente, chave);
+		}
+		catch (RuntimeException re)
+		{
+			re.printStackTrace();
+		}
+		return instance;
+	}
+
+	/**
+	 * Salva o objeto atual na base de dados.
+	 * 
+	 * @param objeto
+	 *            a ser salvo
+	 */
+	public final void inserirColecao(Collection<Entidade> colecao)
+	{
+		EntityTransaction tx = getEntityManager().getTransaction();
+		try
+		{
+			tx.begin();
+			for (Entidade entidade : colecao)
+			{
+				getEntityManager().persist(entidade);
+			}
+			tx.commit();
+			System.out.println(classePersistente.getSimpleName() + " salvos com sucesso: " + colecao.size());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			if (tx != null && tx.isActive())
+			{
+				tx.rollback();
+			}
+		}
+	}
+
+	// Gets e Sets
 	/**
 	 * Utilizado para se injetar o Entity manager no DAO.
 	 * 

@@ -5,21 +5,21 @@ import javax.persistence.TypedQuery;
 
 import br.com.marketedelivery.camada.classesBasicas.Cliente;
 
-public class ClienteDao extends DAOGenerico<Cliente>
+public class ClienteDAO extends DAOGenerico<Cliente>
 {
 	private EntityManager manager;
 
-	public ClienteDao(EntityManager em)
+	public ClienteDAO(EntityManager em)
 	{
 		super(em);
 		this.setManager(em);
 	}
 
-	public Cliente buscarClientePorCPF(String cpf_cnpj)
+	public Cliente pesquisarClientePorCPF(String cpf)
 	{
-		String consulta = "SELECT c FROM Cliente c WHERE c.cpf_cnpj = :N";
+		String consulta = "SELECT c FROM Cliente c WHERE c.cpf = :N";
 		TypedQuery<Cliente> retorno = getEntityManager().createQuery(consulta, Cliente.class);
-		retorno.setParameter("N", cpf_cnpj);
+		retorno.setParameter("N", cpf);
 		Cliente resultado;
 		try
 		{
