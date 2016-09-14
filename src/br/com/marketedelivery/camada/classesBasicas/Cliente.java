@@ -1,5 +1,7 @@
 package br.com.marketedelivery.camada.classesBasicas;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +36,7 @@ public class Cliente
 	@OneToOne
 	private Usuario usuario;
 
-	private Endereco endereco;
+	private List<Endereco> endereco;
 
 	public Cliente()
 	{
@@ -48,7 +50,7 @@ public class Cliente
 	}
 
 	public Cliente(int codigo, String nome, String rg, String cpf, String telefone, String celular, Usuario usuario,
-			Endereco endereco)
+			List<Endereco> endereco)
 	{
 		super();
 		this.codigo = codigo;
@@ -131,12 +133,12 @@ public class Cliente
 		this.usuario = usuario;
 	}
 
-	public Endereco getEndereco()
+	public List<Endereco> getEndereco()
 	{
 		return endereco;
 	}
 
-	public void setEndereco(Endereco endereco)
+	public void setEndereco(List<Endereco> endereco)
 	{
 		this.endereco = endereco;
 	}

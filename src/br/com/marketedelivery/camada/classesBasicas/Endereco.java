@@ -2,10 +2,16 @@ package br.com.marketedelivery.camada.classesBasicas;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Embeddable
+@Entity
+@Table(name="Endereco")
 public class Endereco
 {
+	
 	@Column(name = "cep", length = 9, nullable = false)
 	private String cep;
 

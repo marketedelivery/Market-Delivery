@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -16,6 +17,7 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
+@Table(name="produto")
 public class Produto
 {
 	@Id
@@ -46,6 +48,8 @@ public class Produto
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_validade_produto", length = 50, nullable = false)
 	private Calendar dataValidade;
+	
+	private double preco;
 
 	@Enumerated
 	private Status status;

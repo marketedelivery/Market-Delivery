@@ -22,7 +22,7 @@ public class Categoria
 	private Integer codigo;
 
 	@ManyToOne
-	private Categoria categoria;
+	private Categoria subcategoria;
 
 	@Column(name = "nome_categoria", length = 25, nullable = false)
 	private String nome;
@@ -30,7 +30,7 @@ public class Categoria
 
 	public Categoria()
 	{
-		this.categoria = null;
+		this.subcategoria = null;
 		this.nome = "";
 	}
 
@@ -38,10 +38,10 @@ public class Categoria
 	 * @param categoria
 	 * @param nome
 	 */
-	public Categoria(Categoria categoria, String nome)
+	public Categoria(Categoria subcategoria, String nome)
 	{
 		super();
-		this.categoria = categoria;
+		this.subcategoria = subcategoria;
 		this.nome = nome;
 	}
 
@@ -49,7 +49,7 @@ public class Categoria
 	/**
 	 * @return the categoria
 	 */
-	public Categoria getCategoria()
+	public Categoria getSubcategoria()
 	{
 		return categoria;
 	}
@@ -58,7 +58,7 @@ public class Categoria
 	 * @param categoria
 	 *            the categoria to set
 	 */
-	public void setCategoria(Categoria categoria)
+	public void setSubcategoria(Categoria subcategoria)
 	{
 		this.categoria = categoria;
 	}

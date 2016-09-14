@@ -63,6 +63,23 @@ public class ProdutoDAO extends DAOGenerico<Produto>
 			return null;
 		}
 	}
+	
+	public Produto pesquisarProdutoPorPreco(double preco)
+	{
+		String consulta = "SELECT p FROM Produto p WHERE p.preco = :N";
+		TypedQuery<Produto> retorno = getEntityManager().createQuery(consulta, Produto.class);
+		retorno.setParameter("N", preco);
+		Produto resultado;
+		try
+		{
+			resultado = retorno.getSingleResult();
+			return resultado;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
 
 	// Gets e Sets
 	public EntityManager getManager()
