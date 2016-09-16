@@ -4,8 +4,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.marketedelivery.camada.classesBasicas.Cliente;
+import br.com.marketedelivery.camada.interfaces.dao.IClienteDAO;
 
-public class ClienteDAO extends DAOGenerico<Cliente>
+public class ClienteDAO extends DAOGenerico<Cliente> implements IClienteDAO
 {
 	private EntityManager manager;
 

@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package br.com.marketedelivery.camada.dados;
 
@@ -9,8 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.marketedelivery.camada.classesBasicas.Supermercado;
+import br.com.marketedelivery.camada.interfaces.dao.ISupermercadoDAO;
 
-public class SupermercadoDAO extends DAOGenerico<Supermercado>
+public class SupermercadoDAO extends DAOGenerico<Supermercado> implements ISupermercadoDAO
 {
 	private EntityManager manager;
 
@@ -20,7 +21,7 @@ public class SupermercadoDAO extends DAOGenerico<Supermercado>
 		this.setManager(em);
 	}
 
-	public Supermercado buscarPorCNPJ(String cnpj)
+	public Supermercado pesquisarSupermercadoPorCNPJ(String cnpj)
 	{
 		String consulta = "SELECT c FROM Supermercado c WHERE c.cnpj = :N";
 		TypedQuery<Supermercado> retorno = getEntityManager().createQuery(consulta, Supermercado.class);
@@ -37,7 +38,7 @@ public class SupermercadoDAO extends DAOGenerico<Supermercado>
 		}
 	}
 
-	public Supermercado buscarPorNome(String nome)
+	public Supermercado pesquisarSupermercadoPorNome(String nome)
 	{
 		String comandoSelect = "SELECT s FROM Supermercado s WHERE s.nome = :N ";
 		TypedQuery<Supermercado> retorno = getEntityManager().createQuery(comandoSelect, Supermercado.class);

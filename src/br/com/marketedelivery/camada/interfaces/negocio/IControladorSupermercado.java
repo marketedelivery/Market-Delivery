@@ -16,11 +16,11 @@ import br.com.marketedelivery.camada.exceptions.SupermercadoInexistenteException
 public interface IControladorSupermercado
 {
 	// Métodos
-	public void cadastrarSupermercado(Supermercado Supermercado) throws SupermercadoExistenteException;
+	public String cadastrarSupermercado(Supermercado Supermercado) throws SupermercadoExistenteException;
 
-	public void alterarSupermercado(Supermercado Supermercado) throws SupermercadoInexistenteException;
+	public String alterarSupermercado(Supermercado Supermercado) throws SupermercadoInexistenteException;
 
-	public void excluirSupermercado(Supermercado Supermercado) throws SupermercadoInexistenteException;
+	public String excluirSupermercado(int codigo) throws SupermercadoInexistenteException;
 
 	public Supermercado pesquisarSupermercadoPorCnpj(String cnpj) throws SupermercadoInexistenteException;
 

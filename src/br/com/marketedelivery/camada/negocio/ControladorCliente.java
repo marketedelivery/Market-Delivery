@@ -1,5 +1,6 @@
 package br.com.marketedelivery.camada.negocio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -16,13 +17,25 @@ import br.com.marketedelivery.camada.classesBasicas.Status;
 import br.com.marketedelivery.camada.dados.DAOFactory;
 import br.com.marketedelivery.camada.exceptions.ClienteExistenteException;
 import br.com.marketedelivery.camada.exceptions.ClienteInexistenteException;
+import br.com.marketedelivery.camada.exceptions.ProdutoExistenteException;
+import br.com.marketedelivery.camada.exceptions.ProdutoInexistenteException;
+import br.com.marketedelivery.camada.exceptions.SupermercadoExistenteException;
+import br.com.marketedelivery.camada.exceptions.SupermercadoInexistenteException;
+import br.com.marketedelivery.camada.exceptions.UsuarioExistenteException;
+import br.com.marketedelivery.camada.exceptions.UsuarioInexistenteException;
 import br.com.marketedelivery.camada.interfaces.dao.IClienteDAO;
 import br.com.marketedelivery.camada.interfaces.negocio.IControladorCliente;
+import br.com.marketedelivery.camada.negocio.regras.RNCliente;
+import br.com.marketedelivery.camada.util.Mensagens;
 
 @Path("/service")
 public class ControladorCliente implements IControladorCliente
 {
 	private IClienteDAO clienteDAO;
+
+	private RNCliente rnCliente = new RNCliente();
+
+	Mensagens msg = new Mensagens();
 
 	/**
 	 * @throws ClienteInexistenteException
@@ -35,18 +48,38 @@ public class ControladorCliente implements IControladorCliente
 	@Consumes("application/json; charset=UTF-8")
 	@Produces("application/json; charset=UTF-8")
 	@Path("/cadastrarCliente")
-	public void cadastrarCliente(Cliente cliente) throws ClienteExistenteException
+	public String cadastrarCliente(Cliente cliente)
 	{
-		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
-		if (c == null)
+		new DAOFactory();
+		clienteDAO = DAOFactory.getClienteDAO();
+		// Falta validar os campos
+		boolean existe = rnCliente.verificarClienteExistente(cliente);
+		if (existe == false)
 		{
-			new DAOFactory();
-			clienteDAO = DAOFactory.getClienteDAO();
-			clienteDAO.inserir(cliente);
-		} else
-		{
-			throw new ClienteExistenteException();
+			try
+			{
+				clienteDAO.inserir(cliente);
+				return msg.getMsg_cliente_cadastrado_com_sucesso();
+			}
+			catch (ClienteExistenteException e)
+			{
+				e.printStackTrace();
+				e.getMessage();
+			}
+			catch (ProdutoExistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (SupermercadoExistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (UsuarioExistenteException e)
+			{
+				// e.printStackTrace();
+			}
 		}
+		return "";
 	}
 
 	/**
@@ -56,18 +89,84 @@ public class ControladorCliente implements IControladorCliente
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/alterarCliente")
-	public void alterarCliente(Cliente cliente) throws ClienteInexistenteException
+	public String alterarCliente(Cliente cliente)
 	{
-		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
-		if (c != null)
+		new DAOFactory();
+		clienteDAO = DAOFactory.getClienteDAO();
+		// Falta validar os campos.
+		boolean existe = rnCliente.verificarClienteExistente(cliente);
+		if (existe == true)
 		{
-			new DAOFactory();
-			clienteDAO = DAOFactory.getClienteDAO();
-			clienteDAO.alterar(cliente);
-		} else
-		{
-			throw new ClienteInexistenteException();
+			try
+			{
+				clienteDAO.alterar(cliente);
+				return msg.getMsg_cliente_alterado_com_sucesso();
+			}
+			catch (ClienteInexistenteException e)
+			{
+				e.printStackTrace();
+				e.getMessage();
+			}
+			catch (ProdutoInexistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (SupermercadoInexistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (UsuarioInexistenteException e)
+			{
+				// e.printStackTrace();
+			}
 		}
+		return "";
+	}
+
+	/**
+	 * Excluindo um cliente pelo código
+	 */
+	@DELETE
+	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
+	@Path("/excluirCliente/{codigo}")
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * br.com.marketedelivery.camada.negocio.IControladorCliente#excluirCliente(
+	 * br.com.marketedelivery.camada.classesBasicas.Cliente)
+	 */
+	@Override
+	public String excluirCliente(@PathParam("codigo") int codigo)
+	{
+		new DAOFactory();
+		clienteDAO = DAOFactory.getClienteDAO();
+		Cliente c;
+		try
+		{
+			c = clienteDAO.consultarPorId(codigo);
+			c.getUsuario().setStatus(Status.INATIVO);
+			clienteDAO.alterar(c);
+			return msg.getMsg_cliente_excluido_com_sucesso();
+		}
+		catch (ClienteInexistenteException e)
+		{
+			e.printStackTrace();
+			e.getMessage();
+		}
+		catch (ProdutoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (SupermercadoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (UsuarioInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		return "";
 	}
 
 	/**
@@ -75,19 +174,36 @@ public class ControladorCliente implements IControladorCliente
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
 	@Path("/consultarTodosClientes")
-	public List<Cliente> consultarTodosClientes() throws ClienteInexistenteException
+	public List<Cliente> consultarTodosClientes()
 	{
-		List<Cliente> clientes = clienteDAO.consultarTodos();
-		if (clientes == null || clientes.size() == 0)
+		new DAOFactory();
+		clienteDAO = DAOFactory.getClienteDAO();
+		List<Cliente> clientes = new ArrayList<>();
+		try
 		{
-			throw new ClienteInexistenteException();
-		} else
-		{
-			new DAOFactory();
-			clienteDAO = DAOFactory.getClienteDAO();
+			clientes = clienteDAO.consultarTodos();
 			return clientes;
 		}
+		catch (ClienteInexistenteException e)
+		{
+			e.printStackTrace();
+			e.getMessage();
+		}
+		catch (ProdutoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (SupermercadoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (UsuarioInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		return null;
 	}
 
 	/*
@@ -100,46 +216,63 @@ public class ControladorCliente implements IControladorCliente
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
 	@Path("/pesquisarCliente/{cpf}")
-	public Cliente pesquisarCliente(@PathParam("cpf") String cpf) throws ClienteInexistenteException
+	public Cliente pesquisarCliente(@PathParam("cpf") String cpf)
 	{
 		new DAOFactory();
 		clienteDAO = DAOFactory.getClienteDAO();
-		Cliente cliente = clienteDAO.buscarClientePorCPF(cpf);
-		if (cliente == null)
-		{
-			throw new ClienteInexistenteException();
-		} else
-		{
-			return cliente;
-		}
+		Cliente cliente;
+		cliente = clienteDAO.pesquisarClientePorCPF(cpf);
+		return cliente;
 	}
 
-	/**
-	 * Excluindo um cliente pelo código
+	/*
+	 * @GET
+	 * @Produces("application/json; charset=UTF-8")
+	 * @Path("/pesquisarClientePorId/{codigo}")
 	 */
-	@DELETE
+	/**
+	 * Esse método pesquisa o cliente cadastrado na base
+	 */
+	@GET
 	@Produces("application/json; charset=UTF-8")
-	@Path("/excluirCliente/{codigo}")
+	@Consumes("application/json; charset=UTF-8")
+	@Path("/pesquisarClientePorId/{codigo}")
 	/*
 	 * (non-Javadoc)
 	 * @see
-	 * br.com.marketedelivery.camada.negocio.IControladorCliente#excluirCliente(
-	 * br.com.marketedelivery.camada.classesBasicas.Cliente)
+	 * br.com.marketedelivery.camada.interfaces.negocio.IControladorCliente#
+	 * pesquisarClientePorId(int)
 	 */
 	@Override
-	public void excluirCliente(@PathParam("codigo") Cliente cliente) throws ClienteInexistenteException
+	public Cliente pesquisarClientePorId(@PathParam("codigo") int codigo)
 	{
 		new DAOFactory();
 		clienteDAO = DAOFactory.getClienteDAO();
-		Cliente c = clienteDAO.buscarClientePorCPF(cliente.getCpf());
-		if (c == null)
+		Cliente cliente;
+		try
 		{
-			cliente.getUsuario().setStatus(Status.INATIVO);
-			clienteDAO.alterar(cliente);
-		} else
-		{
-			throw new ClienteInexistenteException();
+			cliente = clienteDAO.consultarPorId(codigo);
+			return cliente;
 		}
+		catch (ClienteInexistenteException e)
+		{
+			e.printStackTrace();
+			e.getMessage();
+		}
+		catch (ProdutoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (SupermercadoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (UsuarioInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		return null;
 	}
 }

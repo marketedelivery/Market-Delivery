@@ -19,15 +19,27 @@ import javax.ws.rs.Produces;
 import br.com.marketedelivery.camada.classesBasicas.Status;
 import br.com.marketedelivery.camada.classesBasicas.Supermercado;
 import br.com.marketedelivery.camada.dados.DAOFactory;
+import br.com.marketedelivery.camada.exceptions.ClienteExistenteException;
+import br.com.marketedelivery.camada.exceptions.ClienteInexistenteException;
+import br.com.marketedelivery.camada.exceptions.ProdutoExistenteException;
+import br.com.marketedelivery.camada.exceptions.ProdutoInexistenteException;
 import br.com.marketedelivery.camada.exceptions.SupermercadoExistenteException;
 import br.com.marketedelivery.camada.exceptions.SupermercadoInexistenteException;
+import br.com.marketedelivery.camada.exceptions.UsuarioExistenteException;
+import br.com.marketedelivery.camada.exceptions.UsuarioInexistenteException;
 import br.com.marketedelivery.camada.interfaces.dao.ISupermercadoDAO;
 import br.com.marketedelivery.camada.interfaces.negocio.IControladorSupermercado;
+import br.com.marketedelivery.camada.negocio.regras.RNSupermercado;
+import br.com.marketedelivery.camada.util.Mensagens;
 
-@Path("/service")
+// @Path("/service")
 public class ControladorSupermercado implements IControladorSupermercado
 {
 	private ISupermercadoDAO supermercadoDAO;
+
+	private RNSupermercado rnSupermercado;
+
+	private Mensagens msg = new Mensagens();
 
 	/**
 	 * @throws SupermercadoInexistenteException
@@ -40,17 +52,38 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Consumes("application/json; charset=UTF-8")
 	@Produces("application/json; charset=UTF-8")
 	@Path("/cadastrarSupermercado")
-	public void cadastrarSupermercado(Supermercado supermercado) throws SupermercadoExistenteException
+	public String cadastrarSupermercado(Supermercado supermercado)
 	{
+		new DAOFactory();
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		Supermercado cli = supermercadoDAO.pesquisarPorCNPJ(supermercado.getCnpj());
-		if (cli == null)
+		// Falta validar os campos
+		boolean existe = rnSupermercado.verificarSupermercadoExistente(supermercado);
+		if (existe == false)
 		{
-			supermercadoDAO.inserir(supermercado);
-		} else
-		{
-			throw new SupermercadoExistenteException();
+			try
+			{
+				supermercadoDAO.inserir(supermercado);
+				return msg.getMsg_supermercado_cadastrado_com_sucesso();
+			}
+			catch (ClienteExistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (ProdutoExistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (SupermercadoExistenteException e)
+			{
+				e.printStackTrace();
+				e.getMessage();
+			}
+			catch (UsuarioExistenteException e)
+			{
+				// e.printStackTrace();
+			}
 		}
+		return "";
 	}
 
 	/**
@@ -62,17 +95,36 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/json; charset=UTF-8")
 	@Path("/alterarSupermercado")
-	public void alterarSupermercado(Supermercado supermercado) throws SupermercadoInexistenteException
+	public String alterarSupermercado(Supermercado supermercado)
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		Supermercado s = supermercadoDAO.pesquisarPorCNPJ(supermercado.getCnpj());
-		if (s != null)
+		// Falta validar os campos.
+		boolean existe = rnSupermercado.verificarSupermercadoExistente(supermercado);
+		if (existe == true)
 		{
-			supermercadoDAO.alterar(supermercado);
-		} else
-		{
-			throw new SupermercadoInexistenteException();
+			try
+			{
+				supermercadoDAO.alterar(supermercado);
+				return msg.getMsg_cliente_alterado_com_sucesso();
+			}
+			catch (ClienteInexistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (ProdutoInexistenteException e)
+			{
+				// e.printStackTrace();
+			}
+			catch (SupermercadoInexistenteException e)
+			{
+				e.printStackTrace();
+			}
+			catch (UsuarioInexistenteException e)
+			{
+				// e.printStackTrace();
+			}
 		}
+		return "";
 	}
 
 	/**
@@ -82,20 +134,37 @@ public class ControladorSupermercado implements IControladorSupermercado
 	 */
 	@DELETE
 	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
 	@Path("/excluirSupermercado/{codigo}")
-	public void excluirSupermercado(@PathParam("codigo") Supermercado supermercado)
-			throws SupermercadoInexistenteException
+	public String excluirSupermercado(@PathParam("codigo") int codigo)
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		Supermercado s = supermercadoDAO.pesquisarPorCNPJ(supermercado.getCnpj());
-		if (s != null)
+		Supermercado s;
+		try
 		{
-			supermercado.getUsuario().setStatus(Status.INATIVO);
-			supermercadoDAO.alterar(supermercado);
-		} else
-		{
-			throw new SupermercadoInexistenteException();
+			s = supermercadoDAO.consultarPorId(codigo);
+			s.getUsuario().setStatus(Status.INATIVO);
+			supermercadoDAO.alterar(s);
+			return msg.getMsg_cliente_excluido_com_sucesso();
 		}
+		catch (ClienteInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (ProdutoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (SupermercadoInexistenteException e)
+		{
+			e.printStackTrace();
+			e.getMessage();
+		}
+		catch (UsuarioInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		return "";
 	}
 
 	/**
@@ -105,19 +174,13 @@ public class ControladorSupermercado implements IControladorSupermercado
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
 	@Path("/pesquisarSupermercadoPorCnpj/{cnpj}")
 	public Supermercado pesquisarSupermercadoPorCnpj(@PathParam("cnpj") String Cnpj)
-			throws SupermercadoInexistenteException
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		Supermercado s = supermercadoDAO.pesquisarPorCNPJ(Cnpj);
-		if (s != null)
-		{
-			return s;
-		} else
-		{
-			throw new SupermercadoInexistenteException();
-		}
+		Supermercado s = supermercadoDAO.pesquisarSupermercadoPorCNPJ(Cnpj);
+		return s;
 	}
 
 	/**
@@ -125,19 +188,35 @@ public class ControladorSupermercado implements IControladorSupermercado
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
 	@Path("/pesquisarSupermercadoPorId/{codigo}")
 	public Supermercado pesquisarSupermercadoPorId(@PathParam("codigo") int codigo)
-			throws SupermercadoInexistenteException
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		Supermercado s = supermercadoDAO.consultarPorId(codigo);
-		if (s != null)
+		Supermercado s;
+		try
 		{
+			s = supermercadoDAO.consultarPorId(codigo);
 			return s;
-		} else
-		{
-			throw new SupermercadoInexistenteException();
 		}
+		catch (ClienteInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (ProdutoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (SupermercadoInexistenteException e)
+		{
+			e.printStackTrace();
+			e.getMessage();
+		}
+		catch (UsuarioInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -145,17 +224,34 @@ public class ControladorSupermercado implements IControladorSupermercado
 	 */
 	@GET
 	@Produces("application/json; charset=UTF-8")
+	@Consumes("application/json; charset=UTF-8")
 	@Path("/consultarTodosSupermercados")
-	public List<Supermercado> consultarTodosSupermercados() throws SupermercadoInexistenteException
+	public List<Supermercado> consultarTodosSupermercados()
 	{
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		List<Supermercado> supermercados = supermercadoDAO.consultarTodos();
-		if (supermercados == null || supermercados.size() == 0)
+		List<Supermercado> supermercados;
+		try
 		{
-			throw new SupermercadoInexistenteException();
-		} else
-		{
+			supermercados = supermercadoDAO.consultarTodos();
 			return supermercados;
 		}
+		catch (ClienteInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (ProdutoInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		catch (SupermercadoInexistenteException e)
+		{
+			e.printStackTrace();
+			e.getMessage();
+		}
+		catch (UsuarioInexistenteException e)
+		{
+			// e.printStackTrace();
+		}
+		return null;
 	}
 }

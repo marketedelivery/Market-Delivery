@@ -4,5 +4,5 @@ import br.com.marketedelivery.camada.classesBasicas.Cliente;
 
 public interface IClienteDAO extends IDAOGenerico<Cliente>
 {
-	public Cliente buscarClientePorCPF(String cpf);
+	public Cliente pesquisarClientePorCPF(String cpf);
 }

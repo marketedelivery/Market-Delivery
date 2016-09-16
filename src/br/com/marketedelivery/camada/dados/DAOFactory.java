@@ -24,24 +24,24 @@ public class DAOFactory
 
 	public static IProdutoDAO produtoDAO;
 
-	public static IUsuarioDAO usuarioDao;
-
 	public static ISupermercadoDAO supermercadoDAO;
+
+	public static IUsuarioDAO usuarioDao;
 	// Construtores
 	static
 	{
-		factory = Persistence.createEntityManagerFactory("db_marketDelivery");
+		factory = Persistence.createEntityManagerFactory("market-delivery-db");
 	}
 
 	public static IClienteDAO getClienteDAO()
 	{
-		clienteDao = (IClienteDAO) new ClienteDAO(factory.createEntityManager());
+		clienteDao = new ClienteDAO(factory.createEntityManager());
 		return clienteDao;
 	}
 
 	public static IProdutoDAO getProdutoDAO()
 	{
-		produtoDAO = (IProdutoDAO) new ProdutoDAO(factory.createEntityManager());
+		produtoDAO = new ProdutoDAO(factory.createEntityManager());
 		return produtoDAO;
 	}
 
@@ -53,7 +53,7 @@ public class DAOFactory
 
 	public static ISupermercadoDAO getSupermercadoDAO()
 	{
-		supermercadoDAO = (ISupermercadoDAO) new SupermercadoDAO(factory.createEntityManager());
+		supermercadoDAO = new SupermercadoDAO(factory.createEntityManager());
 		return supermercadoDAO;
 	}
 

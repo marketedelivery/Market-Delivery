@@ -7,7 +7,7 @@ package br.com.marketedelivery.camada.classesBasicas;
  * @author Audry Martins
  *
  */
-public enum Status
+public enum Tipo
 {
-	ATIVO, INATIVO, DISPONIVEL, INDISPONIVEL
+	ADMIN, CLIENTE, SUPERMERCADO
 }
