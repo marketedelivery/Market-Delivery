@@ -20,13 +20,13 @@ public class DAOFactory
 	// Atributos
 	private static final EntityManagerFactory factory;
 
-	public static IClienteDAO clienteDao;
+	public static IClienteDAO clienteDAO;
 
 	public static IProdutoDAO produtoDAO;
 
 	public static ISupermercadoDAO supermercadoDAO;
 
-	public static IUsuarioDAO usuarioDao;
+	public static IUsuarioDAO usuarioDAO;
 	// Construtores
 	static
 	{
@@ -35,8 +35,8 @@ public class DAOFactory
 
 	public static IClienteDAO getClienteDAO()
 	{
-		clienteDao = new ClienteDAO(factory.createEntityManager());
-		return clienteDao;
+		clienteDAO = new ClienteDAO(factory.createEntityManager());
+		return clienteDAO;
 	}
 
 	public static IProdutoDAO getProdutoDAO()
@@ -47,8 +47,8 @@ public class DAOFactory
 
 	public static IUsuarioDAO getUsuarioDAO()
 	{
-		usuarioDao = new UsuarioDAO(factory.createEntityManager());
-		return usuarioDao;
+		usuarioDAO = new UsuarioDAO(factory.createEntityManager());
+		return usuarioDAO;
 	}
 
 	public static ISupermercadoDAO getSupermercadoDAO()

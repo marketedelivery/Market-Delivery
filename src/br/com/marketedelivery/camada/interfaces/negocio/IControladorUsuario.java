@@ -11,7 +11,7 @@ import br.com.marketedelivery.camada.exceptions.UsuarioInexistenteException;
 
 /**
  * @author Audry Martins
- * @param <Usuario>
+ *
  *
  */
 public interface IControladorUsuario

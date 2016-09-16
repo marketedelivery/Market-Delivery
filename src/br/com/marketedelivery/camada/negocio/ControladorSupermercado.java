@@ -32,12 +32,12 @@ import br.com.marketedelivery.camada.interfaces.negocio.IControladorSupermercado
 import br.com.marketedelivery.camada.negocio.regras.RNSupermercado;
 import br.com.marketedelivery.camada.util.Mensagens;
 
-// @Path("/service")
+@Path("/service")
 public class ControladorSupermercado implements IControladorSupermercado
 {
 	private ISupermercadoDAO supermercadoDAO;
 
-	private RNSupermercado rnSupermercado;
+	private RNSupermercado rnSupermercado = new RNSupermercado();
 
 	private Mensagens msg = new Mensagens();
 

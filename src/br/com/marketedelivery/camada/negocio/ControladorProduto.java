@@ -28,7 +28,7 @@ import br.com.marketedelivery.camada.interfaces.negocio.IControladorProduto;
 import br.com.marketedelivery.camada.negocio.regras.RNProduto;
 import br.com.marketedelivery.camada.util.Mensagens;
 
-// @Path("/service")
+@Path("/service")
 public class ControladorProduto implements IControladorProduto
 {
 	private IProdutoDAO produtoDAO;

@@ -25,12 +25,15 @@ import br.com.marketedelivery.camada.exceptions.UsuarioExistenteException;
 import br.com.marketedelivery.camada.exceptions.UsuarioInexistenteException;
 import br.com.marketedelivery.camada.interfaces.dao.IUsuarioDAO;
 import br.com.marketedelivery.camada.interfaces.negocio.IControladorUsuario;
+import br.com.marketedelivery.camada.negocio.regras.RNUsuario;
 import br.com.marketedelivery.camada.util.Mensagens;
 
 @Path("/service")
 public class ControladorUsuario implements IControladorUsuario
 {
 	private IUsuarioDAO usuarioDAO;
+
+	RNUsuario rnUsuario = new RNUsuario();
 
 	private Mensagens msg = new Mensagens();
 
@@ -46,12 +49,22 @@ public class ControladorUsuario implements IControladorUsuario
 	@Path("/cadastrarUsuario")
 	public String cadastrarUsuario(Usuario usuario)
 	{
-		new DAOFactory();
-		usuarioDAO = DAOFactory.getUsuarioDAO();
+		boolean existe = false;
 		try
 		{
-			// Validar o usuario.
-			usuarioDAO.inserir(usuario);
+			try
+			{
+				existe = rnUsuario.verificarUsuarioExistente(usuario);
+			}
+			catch (UsuarioInexistenteException e)
+			{
+				e.printStackTrace();
+				e.getMessage();
+			}
+			if (existe == false)
+			{
+				usuarioDAO.inserir(usuario);
+			}
 			return msg.getMsg_usuario_cadastrado_com_sucesso();
 		}
 		catch (ClienteExistenteException e)
