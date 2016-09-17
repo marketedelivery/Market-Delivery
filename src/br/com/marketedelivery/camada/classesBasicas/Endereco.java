@@ -1,11 +1,19 @@
 package br.com.marketedelivery.camada.classesBasicas;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Embeddable
+@Entity
+@Table(name = "Endereco")
 public class Endereco
 {
+	@Id
+	@GeneratedValue
+	private Integer codigo;
+
 	@Column(name = "cep", length = 9, nullable = false)
 	private String cep;
 
@@ -37,10 +45,11 @@ public class Endereco
 		this.estado = "";
 	}
 
-	public Endereco(String cep, String logradouro, int numero, String complemento, String bairro, String cidade,
-			String estado)
+	public Endereco(Integer codigo, String cep, String logradouro, int numero, String complemento, String bairro,
+			String cidade, String estado)
 	{
 		super();
+		this.codigo = codigo;
 		this.cep = cep;
 		this.logradouro = logradouro;
 		this.numero = numero;
@@ -48,6 +57,23 @@ public class Endereco
 		this.bairro = bairro;
 		this.cidade = cidade;
 		this.estado = estado;
+	}
+
+	/**
+	 * @return the codigo
+	 */
+	public Integer getCodigo()
+	{
+		return codigo;
+	}
+
+	/**
+	 * @param codigo
+	 *            the codigo to set
+	 */
+	public void setCodigo(Integer codigo)
+	{
+		this.codigo = codigo;
 	}
 
 	public String getCep()

@@ -18,9 +18,9 @@ public class RNProduto
 {
 	// Atributos
 	private IProdutoDAO produtoDAO;
+
 	Mensagens msg = new Mensagens();
-	
-	
+
 	// Métodos
 	public String validarCampos(Produto produto)
 	{
@@ -39,21 +39,20 @@ public class RNProduto
 		if (produto.getQuantidade() == 0) campos.add(String.valueOf(produto.getQuantidade()));
 		if (produto.getCategoria().getNome() == null || (produto.getCategoria().getNome().equals("")))
 			campos.add(produto.getCategoria().getNome());
-		if (produto.getCategoria().getCategoria() == null || (produto.getCategoria().getCategoria().equals("")))
-			campos.add(produto.getCategoria().getCategoria().toString());
+		if (produto.getCategoria().getSubcategoria() == null || (produto.getCategoria().getSubcategoria().equals("")))
+			campos.add(produto.getCategoria().getSubcategoria().toString());
 		if (produto.getSupermercado().getCodigo() == 0)
 			campos.add(String.valueOf(produto.getSupermercado().getCodigo()));
 		if (produto.getUnidadeMedida().getNome() == null || (produto.getUnidadeMedida().getNome().equals("")))
 			campos.add(produto.getUnidadeMedida().getNome());
-		
 		int tam = campos.size();
 		String resultado = "";
 		do
 		{
 			resultado += " " + msg.getMsg_campo_invalido() + campos.get(tam);
 			tam--;
-		}while(tam >= 0);
-		
+		}
+		while (tam >= 0);
 		return resultado;
 	}
 

@@ -146,49 +146,23 @@ public class Supermercado
 		this.estoque = estoque;
 	}
 
-	/**
-	 * @return the preco_Produto
-	 */
 	public double getPreco_Produto()
 	{
 		return preco_Produto;
 	}
 
-	/**
-	 * @param preco_Produto
-	 *            the preco_Produto to set
-	 */
 	public void setPreco_Produto(double preco_Produto)
 	{
 		this.preco_Produto = preco_Produto;
 	}
 
-	/**
-	 * @return the usuario
-	 */
 	public Usuario getUsuario()
 	{
 		return usuario;
 	}
 
-	/**
-	 * @param usuario
-	 *            the usuario to set
-	 */
 	public void setUsuario(Usuario usuario)
 	{
 		this.usuario = usuario;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString()
-	{
-		return "Supermercado [codigo=" + codigo + ", nome=" + nome + ", cnpj=" + cnpj + ", inscricaoEstatdual="
-				+ inscricaoEstatdual + ", telefone=" + telefone + ", email=" + email + ", estoque=" + estoque
-				+ ", preco_Produto=" + preco_Produto + ", usuario=" + usuario + "]";
 	}
 }

@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -16,6 +17,7 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
+@Table(name = "produto")
 public class Produto
 {
 	@Id
@@ -46,6 +48,9 @@ public class Produto
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_validade_produto", length = 50, nullable = false)
 	private Calendar dataValidade;
+
+	@Column(name = "preco_produto", length = 7, nullable = true)
+	private double preco;
 
 	@Enumerated
 	private Status status;
@@ -84,21 +89,23 @@ public class Produto
 	 * @param status
 	 * @param categoria
 	 * @param supermercado
+	 * @param preco
 	 */
 	public Produto(Integer codigo, String nome, String descricao, Marca marca, UnidadeMedida unidadeMedida, int peso,
-			int quantidade, String informaçãoNutricional, Calendar dataValidade, Status status, Categoria categoria,
-			Supermercado supermercado)
+			int quantidade, String informaçãoNutricional, Calendar dataValidade, double preco, Status status,
+			Categoria categoria, Supermercado supermercado)
 	{
 		super();
 		this.codigo = codigo;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.marca = marca;
-		UnidadeMedida = unidadeMedida;
+		this.UnidadeMedida = unidadeMedida;
 		this.peso = peso;
 		this.quantidade = quantidade;
 		this.informaçãoNutricional = informaçãoNutricional;
 		this.dataValidade = dataValidade;
+		this.preco = preco;
 		this.status = status;
 		this.categoria = categoria;
 		this.supermercado = supermercado;
@@ -195,6 +202,23 @@ public class Produto
 		this.dataValidade = dataValidade;
 	}
 
+	/**
+	 * @return the preco
+	 */
+	public double getPreco()
+	{
+		return preco;
+	}
+
+	/**
+	 * @param preco
+	 *            the preco to set
+	 */
+	public void setPreco(double preco)
+	{
+		this.preco = preco;
+	}
+	
 	public Status getStatus()
 	{
 		return status;
@@ -214,7 +238,8 @@ public class Produto
 	}
 
 	/**
-	 * @param categoria the categoria to set
+	 * @param categoria
+	 *            the categoria to set
 	 */
 	public void setCategoria(Categoria categoria)
 	{
@@ -230,7 +255,8 @@ public class Produto
 	}
 
 	/**
-	 * @param supermercado the supermercado to set
+	 * @param supermercado
+	 *            the supermercado to set
 	 */
 	public void setSupermercado(Supermercado supermercado)
 	{
