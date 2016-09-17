@@ -54,33 +54,34 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Path("/cadastrarSupermercado")
 	public String cadastrarSupermercado(Supermercado supermercado)
 	{
-		new DAOFactory();
-		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		// Falta validar os campos
-		boolean existe = rnSupermercado.verificarSupermercadoExistente(supermercado);
-		if (existe == false)
+		String resultado = rnSupermercado.validarCampos(supermercado);
+		if (!resultado.equals("") || resultado.length() != 0)
 		{
-			try
+			boolean existe = rnSupermercado.verificarSupermercadoExistente(supermercado);
+			if (existe == false)
 			{
-				supermercadoDAO.inserir(supermercado);
-				return msg.getMsg_supermercado_cadastrado_com_sucesso();
-			}
-			catch (ClienteExistenteException e)
-			{
-				// e.printStackTrace();
-			}
-			catch (ProdutoExistenteException e)
-			{
-				// e.printStackTrace();
-			}
-			catch (SupermercadoExistenteException e)
-			{
-				e.printStackTrace();
-				e.getMessage();
-			}
-			catch (UsuarioExistenteException e)
-			{
-				// e.printStackTrace();
+				try
+				{
+					supermercadoDAO.inserir(supermercado);
+					return msg.getMsg_supermercado_cadastrado_com_sucesso();
+				}
+				catch (ClienteExistenteException e)
+				{
+					// e.printStackTrace();
+				}
+				catch (ProdutoExistenteException e)
+				{
+					// e.printStackTrace();
+				}
+				catch (SupermercadoExistenteException e)
+				{
+					e.printStackTrace();
+					return e.getMessage();
+				}
+				catch (UsuarioExistenteException e)
+				{
+					// e.printStackTrace();
+				}
 			}
 		}
 		return "";
@@ -97,31 +98,34 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Path("/alterarSupermercado")
 	public String alterarSupermercado(Supermercado supermercado)
 	{
-		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		// Falta validar os campos.
-		boolean existe = rnSupermercado.verificarSupermercadoExistente(supermercado);
-		if (existe == true)
+		String resultado = rnSupermercado.validarCampos(supermercado);
+		if (!resultado.equals("") || resultado.length() != 0)
 		{
-			try
+			boolean existe = rnSupermercado.verificarSupermercadoExistente(supermercado);
+			if (existe == true)
 			{
-				supermercadoDAO.alterar(supermercado);
-				return msg.getMsg_cliente_alterado_com_sucesso();
-			}
-			catch (ClienteInexistenteException e)
-			{
-				// e.printStackTrace();
-			}
-			catch (ProdutoInexistenteException e)
-			{
-				// e.printStackTrace();
-			}
-			catch (SupermercadoInexistenteException e)
-			{
-				e.printStackTrace();
-			}
-			catch (UsuarioInexistenteException e)
-			{
-				// e.printStackTrace();
+				try
+				{
+					supermercadoDAO.alterar(supermercado);
+					return msg.getMsg_cliente_alterado_com_sucesso();
+				}
+				catch (ClienteInexistenteException e)
+				{
+					// e.printStackTrace();
+				}
+				catch (ProdutoInexistenteException e)
+				{
+					// e.printStackTrace();
+				}
+				catch (SupermercadoInexistenteException e)
+				{
+					e.printStackTrace();
+					return e.getMessage();
+				}
+				catch (UsuarioInexistenteException e)
+				{
+					// e.printStackTrace();
+				}
 			}
 		}
 		return "";
@@ -138,11 +142,11 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Path("/excluirSupermercado/{codigo}")
 	public String excluirSupermercado(@PathParam("codigo") int codigo)
 	{
+		new DAOFactory();
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
-		Supermercado s;
 		try
 		{
-			s = supermercadoDAO.consultarPorId(codigo);
+			Supermercado s = supermercadoDAO.consultarPorId(codigo);
 			s.getUsuario().setStatus(Status.INATIVO);
 			supermercadoDAO.alterar(s);
 			return msg.getMsg_cliente_excluido_com_sucesso();
@@ -158,7 +162,7 @@ public class ControladorSupermercado implements IControladorSupermercado
 		catch (SupermercadoInexistenteException e)
 		{
 			e.printStackTrace();
-			e.getMessage();
+			return e.getMessage();
 		}
 		catch (UsuarioInexistenteException e)
 		{
@@ -178,6 +182,7 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Path("/pesquisarSupermercadoPorCnpj/{cnpj}")
 	public Supermercado pesquisarSupermercadoPorCnpj(@PathParam("cnpj") String Cnpj)
 	{
+		new DAOFactory();
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
 		Supermercado s = supermercadoDAO.pesquisarSupermercadoPorCNPJ(Cnpj);
 		return s;
@@ -192,6 +197,7 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Path("/pesquisarSupermercadoPorId/{codigo}")
 	public Supermercado pesquisarSupermercadoPorId(@PathParam("codigo") int codigo)
 	{
+		new DAOFactory();
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
 		Supermercado s;
 		try
@@ -228,6 +234,7 @@ public class ControladorSupermercado implements IControladorSupermercado
 	@Path("/consultarTodosSupermercados")
 	public List<Supermercado> consultarTodosSupermercados()
 	{
+		new DAOFactory();
 		supermercadoDAO = DAOFactory.getSupermercadoDAO();
 		List<Supermercado> supermercados;
 		try

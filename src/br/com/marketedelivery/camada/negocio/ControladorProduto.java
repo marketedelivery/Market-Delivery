@@ -50,11 +50,9 @@ public class ControladorProduto implements IControladorProduto
 	public String cadastrarProduto(Produto produto)
 	{
 		String resultado = rnProduto.validarCampos(produto);
-		if (resultado.equals("") || resultado.length() == 0)
+		if (!resultado.equals("") || resultado.length() != 0)
 		{
 			boolean existe = rnProduto.verificarProdutoExistente(produto);
-			new DAOFactory();
-			produtoDAO = DAOFactory.getProdutoDAO();
 			if (existe == false)
 			{
 				try
@@ -94,11 +92,9 @@ public class ControladorProduto implements IControladorProduto
 	public String alterarProduto(Produto produto)
 	{
 		String resultado = rnProduto.validarCampos(produto);
-		if (resultado.equals("") || resultado.length() == 0)
+		if (!resultado.equals("") || resultado.length() != 0)
 		{
 			boolean existe = rnProduto.verificarProdutoExistente(produto);
-			new DAOFactory();
-			produtoDAO = DAOFactory.getProdutoDAO();
 			if (existe == true)
 			{
 				try
@@ -139,10 +135,9 @@ public class ControladorProduto implements IControladorProduto
 	{
 		new DAOFactory();
 		produtoDAO = DAOFactory.getProdutoDAO();
-		Produto p;
 		try
 		{
-			p = produtoDAO.consultarPorId(codigo);
+			Produto p = produtoDAO.consultarPorId(codigo);
 			p.setStatus(Status.INATIVO);
 			produtoDAO.alterar(p);
 			return msg.getMsg_produto_excluido_com_sucesso();
@@ -154,6 +149,7 @@ public class ControladorProduto implements IControladorProduto
 		catch (ProdutoInexistenteException e)
 		{
 			e.printStackTrace();
+			return e.getMessage();
 		}
 		catch (SupermercadoInexistenteException e)
 		{
@@ -246,10 +242,9 @@ public class ControladorProduto implements IControladorProduto
 	{
 		new DAOFactory();
 		produtoDAO = DAOFactory.getProdutoDAO();
-		Produto p;
 		try
 		{
-			p = produtoDAO.consultarPorId(codigo);
+			Produto p = produtoDAO.consultarPorId(codigo);
 			return p;
 		}
 		catch (ClienteInexistenteException e)

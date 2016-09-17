@@ -54,6 +54,7 @@ public class ControladorUsuario implements IControladorUsuario
 		{
 			try
 			{
+				// Falta validar os campos
 				existe = rnUsuario.verificarUsuarioExistente(usuario);
 			}
 			catch (UsuarioInexistenteException e)
@@ -96,13 +97,23 @@ public class ControladorUsuario implements IControladorUsuario
 	@Path("/alterarUsuario")
 	public String alterarUsuario(Usuario usuario)
 	{
-		new DAOFactory();
-		usuarioDAO = DAOFactory.getUsuarioDAO();
+		boolean existe = false;
 		try
 		{
-			// Validar o usuario.
-			usuarioDAO.alterar(usuario);
-			return msg.getMsg_usuario_alterado_com_sucesso();
+			try
+			{
+				existe = rnUsuario.verificarUsuarioExistente(usuario);
+			}
+			catch (UsuarioInexistenteException e)
+			{
+				e.printStackTrace();
+				e.getMessage();
+			}
+			if (existe == true)
+			{
+				usuarioDAO.alterar(usuario);
+				return msg.getMsg_usuario_alterado_com_sucesso();
+			}
 		}
 		catch (ClienteInexistenteException e)
 		{
@@ -174,7 +185,6 @@ public class ControladorUsuario implements IControladorUsuario
 		usuarioDAO = DAOFactory.getUsuarioDAO();
 		try
 		{
-			// Validar o usuario.
 			Usuario user = usuarioDAO.consultarPorId(codigo);
 			user.setStatus(Status.INATIVO);
 			usuarioDAO.alterar(user);

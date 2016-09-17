@@ -64,7 +64,7 @@ public class ControladorCliente implements IControladorCliente
 			catch (ClienteExistenteException e)
 			{
 				e.printStackTrace();
-				e.getMessage();
+				return e.getMessage();
 			}
 			catch (ProdutoExistenteException e)
 			{
@@ -91,8 +91,6 @@ public class ControladorCliente implements IControladorCliente
 	@Path("/alterarCliente")
 	public String alterarCliente(Cliente cliente)
 	{
-		new DAOFactory();
-		clienteDAO = DAOFactory.getClienteDAO();
 		// Falta validar os campos.
 		boolean existe = rnCliente.verificarClienteExistente(cliente);
 		if (existe == true)
@@ -105,7 +103,7 @@ public class ControladorCliente implements IControladorCliente
 			catch (ClienteInexistenteException e)
 			{
 				e.printStackTrace();
-				e.getMessage();
+				return e.getMessage();
 			}
 			catch (ProdutoInexistenteException e)
 			{
@@ -141,10 +139,9 @@ public class ControladorCliente implements IControladorCliente
 	{
 		new DAOFactory();
 		clienteDAO = DAOFactory.getClienteDAO();
-		Cliente c;
 		try
 		{
-			c = clienteDAO.consultarPorId(codigo);
+			Cliente c = clienteDAO.consultarPorId(codigo);
 			c.getUsuario().setStatus(Status.INATIVO);
 			clienteDAO.alterar(c);
 			return msg.getMsg_cliente_excluido_com_sucesso();
@@ -152,7 +149,7 @@ public class ControladorCliente implements IControladorCliente
 		catch (ClienteInexistenteException e)
 		{
 			e.printStackTrace();
-			e.getMessage();
+			return e.getMessage();
 		}
 		catch (ProdutoInexistenteException e)
 		{
@@ -222,9 +219,12 @@ public class ControladorCliente implements IControladorCliente
 	{
 		new DAOFactory();
 		clienteDAO = DAOFactory.getClienteDAO();
-		Cliente cliente;
-		cliente = clienteDAO.pesquisarClientePorCPF(cpf);
-		return cliente;
+		Cliente c = clienteDAO.pesquisarClientePorCPF(cpf);
+		if (c == null)
+		{
+			return null;
+		}
+		return c;
 	}
 
 	/*

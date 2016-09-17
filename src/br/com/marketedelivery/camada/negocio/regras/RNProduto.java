@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.marketedelivery.camada.classesBasicas.Produto;
+import br.com.marketedelivery.camada.dados.DAOFactory;
 import br.com.marketedelivery.camada.interfaces.dao.IProdutoDAO;
 import br.com.marketedelivery.camada.util.Mensagens;
 
@@ -58,6 +59,8 @@ public class RNProduto
 
 	public boolean verificarProdutoExistente(Produto produto)
 	{
+		new DAOFactory();
+		produtoDAO = DAOFactory.getProdutoDAO();
 		Produto p = produtoDAO.pesquisarProdutoPorNome(produto.getNome());
 		if (p == null)
 		{
